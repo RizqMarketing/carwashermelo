@@ -964,18 +964,40 @@
             }
             .hero-left {
                 order: 1;
-                padding: 0 0 0.5rem;
+                padding: 4.5rem 1.8rem 2rem;
                 background: none;
                 text-align: left;
             }
-            .hero-left > * { padding-left: 1.8rem; padding-right: 1.8rem; }
             .hero-left::before { display: none; }
-            .hero-left .hero-logo { width: 180px; margin-bottom: 0.5rem; }
-            .hero-left .hero-badge { margin-bottom: 0.4rem; font-size: 0.75rem; padding: 0.35rem 0.9rem; }
-            .hero-left h1 { font-size: 2rem; letter-spacing: -1px; margin-bottom: 0.5rem; }
-            .hero-left .hero-tagline { margin-bottom: 1rem; font-size: 0.85rem; }
-            .hero-left .hero-buttons .btn { padding: 0.8rem 1.5rem; font-size: 0.9rem; }
-            .hero-left .hero-buttons { justify-content: flex-start; }
+
+            /* Logo — herkenbaar maar niet dominant */
+            .hero-left .hero-logo { width: 170px; margin-bottom: 1.2rem; }
+
+            /* Badge — subtiel, compact */
+            .hero-left .hero-badge {
+                margin-bottom: 1.2rem; font-size: 0.78rem;
+                padding: 0.4rem 1rem;
+            }
+
+            /* Heading — het grootste element, trekt de aandacht */
+            .hero-left h1 {
+                font-size: 2.4rem; letter-spacing: -1px;
+                margin-bottom: 0.6rem; line-height: 1.1;
+            }
+
+            /* Tagline — rustige ademruimte */
+            .hero-left .hero-tagline {
+                margin-bottom: 1.8rem; font-size: 0.92rem;
+                line-height: 1.6; max-width: 90%;
+            }
+
+            /* Buttons — naast elkaar, gelijke grootte */
+            .hero-left .hero-buttons {
+                justify-content: flex-start; gap: 0.7rem;
+            }
+            .hero-left .hero-buttons .btn {
+                padding: 0.85rem 1.6rem; font-size: 0.88rem;
+            }
             .hero-right {
                 order: 2;
                 position: relative;
