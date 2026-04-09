@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carwash Ermelo — De Schoonste Auto voor de Beste Prijs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --dark: #0a0e17;
+            --dark-surface: #111827;
+            --dark-card: #1a2235;
+            --dark-border: #243049;
+            --blue-primary: #0ea5e9;
+            --blue-glow: #38bdf8;
+            --blue-deep: #0369a1;
+            --cyan: #22d3ee;
+            --cyan-soft: rgba(34, 211, 238, 0.1);
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --white: #f0f4f8;
+            --gray: #94a3b8;
+            --gray-dim: #64748b;
+            --success: #10b981;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow-glow: 0 0 60px rgba(14, 165, 233, 0.15);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--blue-primary) var(--dark); }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ═══════ WATER BACKGROUND ═══════ */
+        .water-bg {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: -1; overflow: hidden;
+        }
+        .water-bg::before {
+            content: ''; position: absolute;
+            width: 200%; height: 200%; top: -50%; left: -50%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(34, 211, 238, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(3, 105, 161, 0.08) 0%, transparent 50%);
+            animation: waterFloat 20s ease-in-out infinite;
+        }
+        @keyframes waterFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(1deg); }
+            66% { transform: translate(-20px, 20px) rotate(-1deg); }
+        }
+        .droplet {
+            position: fixed; width: 4px; height: 4px;
+            background: var(--blue-glow); border-radius: 50%;
+            opacity: 0; pointer-events: none; z-index: 0;
+        }
+
+        /* ═══════ NAVIGATION ═══════ */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1rem 2rem; transition: var(--transition);
+        }
+        nav.scrolled {
+            background: rgba(10, 14, 23, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--dark-border);
+            padding: 0.6rem 2rem;
+        }
+        .nav-inner {
+            max-width: 1300px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; text-decoration: none; }
+        .logo img {
+            height: 48px; width: auto;
+            filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.3));
+            transition: var(--transition);
+        }
+        .logo:hover img { filter: drop-shadow(0 0 14px rgba(14, 165, 233, 0.5)); }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+        .nav-links a {
+            color: var(--gray); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; transition: var(--transition); position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 2px; background: var(--blue-primary); transition: var(--transition);
+        }
+        .nav-links a:hover { color: var(--white); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cta {
+            background: linear-gradient(135deg, var(--blue-primary), var(--cyan));
+            color: var(--dark) !important; padding: 0.6rem 1.4rem;
+            border-radius: 50px; font-weight: 700 !important;
+            font-family: var(--font-display); transition: var(--transition) !important;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+        }
+        .nav-cta::after { display: none !important; }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(14, 165, 233, 0.5) !important; }
+
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: var(--white); margin: 6px 0; transition: var(--transition); }
+
+        /* ═══════ HERO ═══════ */
+        .hero {
+            min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+            position: relative; overflow: hidden;
+        }
+        .hero-left {
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 8rem 4rem 4rem 6%;
+            position: relative; z-index: 2;
+            background: linear-gradient(90deg, var(--dark) 60%, transparent 100%);
+        }
+        .hero-right {
+            position: relative; overflow: hidden;
+        }
+        .hero-right video,
+        .hero-right img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: brightness(0.8) saturate(1.15) contrast(1.05);
+        }
+        .hero-right::before {
+            content: ''; position: absolute; inset: 0; z-index: 1;
+            background:
+                linear-gradient(90deg, var(--dark) 0%, rgba(10,14,23,0.3) 35%, transparent 100%),
+                linear-gradient(0deg, rgba(10,14,23,0.4) 0%, transparent 25%),
+                linear-gradient(180deg, rgba(10,14,23,0.3) 0%, transparent 15%);
+        }
+        .hero-right::after {
+            content: ''; position: absolute; inset: 0; z-index: 2;
+            background: radial-gradient(ellipse at 30% 50%, rgba(14,165,233,0.06) 0%, transparent 70%);
+        }
+
+        /* ═══════ HERO BUBBLES ═══════ */
+        .hero-bubbles {
+            position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden;
+        }
+        .bubble {
+            position: absolute; bottom: -80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%,
+                rgba(255,255,255,0.25) 0%,
+                rgba(255,255,255,0.08) 40%,
+                rgba(14,165,233,0.05) 70%,
+                transparent 100%);
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow:
+                inset 0 -4px 8px rgba(255,255,255,0.06),
+                inset 4px 4px 10px rgba(255,255,255,0.08),
+                0 0 12px rgba(14,165,233,0.06);
+            animation: bubbleRise linear infinite;
+        }
+        .bubble::before {
+            content: ''; position: absolute;
+            top: 18%; left: 22%;
+            width: 30%; height: 20%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            filter: blur(2px);
+            transform: rotate(-35deg);
+        }
+        @keyframes bubbleRise {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 0.7; }
+            100% { transform: translateY(-110vh) translateX(var(--drift)) scale(var(--end-scale)); opacity: 0; }
+        }
+        .bubble:nth-child(1)  { width:42px; height:42px; left:5%;  animation-duration:9s;  animation-delay:0s;   --drift:40px;  --end-scale:0.6; }
+        .bubble:nth-child(2)  { width:18px; height:18px; left:15%; animation-duration:7s;  animation-delay:1.2s; --drift:-30px; --end-scale:0.8; }
+        .bubble:nth-child(3)  { width:55px; height:55px; left:25%; animation-duration:11s; animation-delay:0.3s; --drift:50px;  --end-scale:0.5; }
+        .bubble:nth-child(4)  { width:14px; height:14px; left:35%; animation-duration:6.5s;animation-delay:2.5s; --drift:-20px; --end-scale:0.9; }
+        .bubble:nth-child(5)  { width:32px; height:32px; left:45%; animation-duration:10s; animation-delay:1s;   --drift:35px;  --end-scale:0.7; }
+        .bubble:nth-child(6)  { width:24px; height:24px; left:55%; animation-duration:8s;  animation-delay:3.5s; --drift:-40px; --end-scale:0.6; }
+        .bubble:nth-child(7)  { width:48px; height:48px; left:65%; animation-duration:12s; animation-delay:0.5s; --drift:30px;  --end-scale:0.5; }
+        .bubble:nth-child(8)  { width:16px; height:16px; left:75%; animation-duration:7s;  animation-delay:4s;   --drift:-25px; --end-scale:0.8; }
+        .bubble:nth-child(9)  { width:28px; height:28px; left:85%; animation-duration:9s;  animation-delay:2s;   --drift:45px;  --end-scale:0.6; }
+        .bubble:nth-child(10) { width:38px; height:38px; left:92%; animation-duration:10s; animation-delay:1.5s; --drift:-35px; --end-scale:0.7; }
+        .bubble:nth-child(11) { width:11px; height:11px; left:10%; animation-duration:6s;  animation-delay:3s;   --drift:15px;  --end-scale:0.9; }
+        .bubble:nth-child(12) { width:20px; height:20px; left:40%; animation-duration:8.5s;animation-delay:5s;   --drift:-30px; --end-scale:0.7; }
+        .bubble:nth-child(13) { width:22px; height:22px; left:70%; animation-duration:7.5s;animation-delay:1.8s; --drift:20px;  --end-scale:0.8; }
+        .bubble:nth-child(14) { width:58px; height:58px; left:50%; animation-duration:13s; animation-delay:0.2s; --drift:-45px; --end-scale:0.4; }
+        .bubble:nth-child(15) { width:15px; height:15px; left:20%; animation-duration:6.5s;animation-delay:4.5s; --drift:25px;  --end-scale:0.9; }
+
+        .hero-logo {
+            height: auto; width: 220px; max-width: 220px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 30px rgba(14, 165, 233, 0.25));
+            animation: fadeInUp 0.8s ease-out;
+            object-fit: contain;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.15);
+            padding: 0.45rem 1.1rem; border-radius: 50px;
+            font-size: 0.82rem; color: var(--blue-glow); margin-bottom: 1.8rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+            width: fit-content;
+        }
+        .hero-badge .pulse {
+            width: 7px; height: 7px; background: var(--success);
+            border-radius: 50%; animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.5); } }
+
+        .hero h1 {
+            font-family: var(--font-display); font-weight: 900;
+            font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.08;
+            letter-spacing: -1.5px; margin-bottom: 1.2rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .hero h1 .thin { font-weight: 300; color: var(--gray); }
+
+        .hero-tagline {
+            font-size: 1.05rem; line-height: 1.7;
+            color: var(--gray); max-width: 440px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.35s both;
+        }
+        .hero-buttons {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+
+        /* ═══════ BUTTONS ═══════ */
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 1rem 2rem; border-radius: 50px;
+            font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+            cursor: pointer; border: none; text-decoration: none; transition: var(--transition);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-primary), var(--cyan));
+            color: var(--dark); box-shadow: 0 0 30px rgba(14, 165, 233, 0.3);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(14, 165, 233, 0.5); }
+        .btn-outline {
+            background: transparent; color: var(--white);
+            border: 1px solid var(--dark-border);
+        }
+        .btn-outline:hover { border-color: var(--blue-primary); background: rgba(14, 165, 233, 0.05); transform: translateY(-3px); }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--dark); box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+        }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(245, 158, 11, 0.5); }
+
+        /* ═══════ STATS ═══════ */
+        .stats-bar { padding: 0 2rem; margin-top: -50px; position: relative; z-index: 2; }
+        .stats-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem;
+        }
+        .stat {
+            background: rgba(26, 34, 53, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--dark-border);
+            border-radius: var(--radius);
+            padding: 1.8rem 1.5rem; text-align: center;
+            transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .stat::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 50%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue-primary), transparent);
+            opacity: 0; transition: var(--transition);
+        }
+        .stat:hover {
+            transform: translateY(-5px);
+            border-color: rgba(14, 165, 233, 0.25);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 30px rgba(14, 165, 233, 0.06);
+        }
+        .stat:hover::before { opacity: 1; width: 80%; }
+        .stat-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(14, 165, 233, 0.08);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .stat-number {
+            font-family: var(--font-display); font-weight: 800; font-size: 2.2rem;
+            color: var(--white); line-height: 1;
+            background: linear-gradient(180deg, var(--white) 30%, var(--blue-glow) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .stat-label { font-size: 0.82rem; color: var(--gray); margin-top: 0.4rem; letter-spacing: 0.3px; }
+
+        /* ═══════ SECTIONS ═══════ */
+        section { padding: 7rem 2rem; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+        .section-label {
+            font-family: var(--font-display); font-weight: 600; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 3px; color: var(--blue-primary); margin-bottom: 1rem;
+        }
+        .section-title {
+            font-family: var(--font-display); font-weight: 800;
+            font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -1px; line-height: 1.15; margin-bottom: 1rem;
+        }
+        .section-desc { color: var(--gray); font-size: 1.05rem; }
+
+        /* ═══════ PHOTO GALLERY — INSTAGRAM STYLE ═══════ */
+        .gallery-section { padding-bottom: 4rem; overflow: hidden; }
+        .gallery-header {
+            max-width: 1200px; margin: 0 auto 3rem; padding: 0 2rem;
+            display: flex; align-items: flex-end; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .gallery-header .ig-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: var(--gray); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; transition: var(--transition); font-family: var(--font-display);
+        }
+        .gallery-header .ig-link:hover { color: var(--blue-glow); }
+
+        /* Scroll carousel */
+        .photo-scroll {
+            display: flex; gap: 1.2rem; padding: 0 2rem;
+            overflow-x: auto; scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none; cursor: grab;
+        }
+        .photo-scroll::-webkit-scrollbar { display: none; }
+        .photo-scroll:active { cursor: grabbing; }
+
+        .photo-card {
+            flex: 0 0 320px; scroll-snap-align: start;
+            border-radius: var(--radius); overflow: hidden;
+            position: relative; aspect-ratio: 4/5;
+            border: 1px solid var(--dark-border);
+            transition: all 0.5s var(--transition);
+        }
+        .photo-card:hover { transform: scale(1.03); border-color: rgba(14, 165, 233, 0.3); box-shadow: var(--shadow-glow); }
+        .photo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--transition); }
+        .photo-card:hover img { transform: scale(1.08); }
+        .photo-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(0deg, rgba(10,14,23,0.8) 0%, transparent 50%);
+            opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; padding: 1.5rem;
+        }
+        .photo-card:hover .photo-overlay { opacity: 1; }
+        .photo-overlay span { font-size: 0.9rem; color: var(--white); font-weight: 600; font-family: var(--font-display); }
+
+        /* Masonry grid */
+        .masonry-grid {
+            max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 260px; gap: 1rem;
+        }
+        .m-item {
+            border-radius: var(--radius); overflow: hidden;
+            position: relative; border: 1px solid var(--dark-border);
+            transition: all 0.4s var(--transition); cursor: pointer;
+        }
+        .m-item:hover { border-color: rgba(14, 165, 233, 0.3); box-shadow: var(--shadow-glow); }
+        .m-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--transition); }
+        .m-item:hover img { transform: scale(1.06); }
+        .m-tall { grid-row: span 2; }
+        .m-wide { grid-column: span 2; }
+        .m-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(0deg, rgba(10,14,23,0.7) 0%, transparent 40%);
+            opacity: 0; transition: opacity 0.35s;
+            display: flex; align-items: flex-end; padding: 1.2rem;
+        }
+        .m-item:hover .m-overlay { opacity: 1; }
+        .m-overlay span { font-size: 0.85rem; color: var(--gray); font-weight: 500; font-family: var(--font-display); }
+
+        /* Photo placeholders when images missing */
+        .photo-card img, .m-item img {
+            background: var(--dark-card);
+        }
+
+        /* ═══════ SERVICES ═══════ */
+        .services-grid {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+        }
+        .service-card {
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            border-radius: var(--radius); padding: 2.5rem 2rem;
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--blue-primary), var(--cyan));
+            transform: scaleX(0); transform-origin: left; transition: var(--transition);
+        }
+        .service-card:hover { transform: translateY(-8px); border-color: rgba(14, 165, 233, 0.3); box-shadow: var(--shadow-glow); }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-icon {
+            width: 56px; height: 56px; border-radius: 14px;
+            background: rgba(14, 165, 233, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; margin-bottom: 1.5rem;
+        }
+        .service-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; margin-bottom: 0.8rem; }
+        .service-card p { color: var(--gray); font-size: 0.95rem; }
+
+        /* ═══════ WASBONNEN / PRICING ═══════ */
+        #wasbonnen { background: linear-gradient(180deg, var(--dark) 0%, rgba(14, 165, 233, 0.03) 50%, var(--dark) 100%); }
+        .programs-grid {
+            max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.2rem; align-items: start;
+        }
+        .program-card {
+            background: linear-gradient(180deg, #1a2540 0%, var(--dark-card) 100%);
+            border: 1px solid var(--dark-border);
+            border-radius: var(--radius); padding: 2.5rem 2rem;
+            position: relative; transition: var(--transition); overflow: hidden;
+        }
+        .program-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: var(--radius);
+            background: radial-gradient(circle at 50% 0%, rgba(14,165,233,0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .program-card::after {
+            content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(14,165,233,0.15), transparent);
+        }
+        .program-card.featured {
+            border-color: rgba(14, 165, 233, 0.4);
+            background: linear-gradient(180deg, #162a4a 0%, #1a2540 100%);
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(14, 165, 233, 0.1), 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .program-card.featured::after {
+            background: linear-gradient(90deg, transparent, var(--blue-primary), transparent);
+            height: 2px; left: 5%; right: 5%;
+        }
+        .program-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 40px rgba(14,165,233,0.08); border-color: rgba(14,165,233,0.2); }
+        .program-card.featured:hover { transform: scale(1.05) translateY(-8px); }
+        .program-badge {
+            position: absolute; top: -1px; right: 2rem;
+            background: linear-gradient(135deg, var(--blue-primary), var(--cyan));
+            color: var(--dark); font-family: var(--font-display);
+            font-weight: 700; font-size: 0.72rem; text-transform: uppercase;
+            letter-spacing: 1.5px; padding: 0.4rem 1.1rem; border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 15px rgba(14,165,233,0.3);
+        }
+        .program-tier {
+            font-family: var(--font-display); font-weight: 600; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 2.5px; color: var(--blue-glow); margin-bottom: 0.4rem;
+        }
+        .program-name {
+            font-family: var(--font-display); font-weight: 800; font-size: 1.7rem; margin-bottom: 1.5rem;
+            background: linear-gradient(180deg, var(--white) 0%, rgba(240,244,248,0.7) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .program-price { display: flex; align-items: flex-start; gap: 0.15rem; margin-bottom: 0.5rem; }
+        .program-price .currency {
+            font-family: 'Sora', var(--font-display); font-weight: 300; font-size: 1.4rem;
+            color: var(--blue-glow); margin-top: 0.6rem;
+        }
+        .program-price .amount {
+            font-family: 'Sora', var(--font-display); font-weight: 800; font-size: 4.2rem;
+            line-height: 1; letter-spacing: -3px; color: var(--white);
+        }
+        .program-card.featured .program-price .amount {
+            background: linear-gradient(180deg, var(--white) 30%, var(--blue-glow) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .program-price-note { font-size: 0.78rem; color: var(--gray-dim); margin-bottom: 1.5rem; }
+        .program-divider {
+            width: 100%; height: 1px; margin: 1.5rem 0;
+            background: linear-gradient(90deg, transparent, var(--dark-border), transparent);
+        }
+        .program-features { list-style: none; margin-bottom: 2rem; }
+        .program-features li {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.55rem 0; font-size: 0.9rem; color: var(--gray);
+        }
+        .check {
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(14, 165, 233, 0.1); color: var(--blue-glow);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(14,165,233,0.08);
+        }
+        .program-card.featured .check {
+            background: rgba(14, 165, 233, 0.15);
+        }
+        .cross {
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(148, 163, 184, 0.04); color: var(--gray-dim);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; flex-shrink: 0; opacity: 0.3;
+        }
+        .program-btn {
+            width: 100%; padding: 1rem; border-radius: var(--radius-sm);
+            font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; border: none; transition: var(--transition);
+            text-align: center; text-decoration: none; display: block;
+        }
+        .program-card:not(.featured) .program-btn {
+            background: rgba(14, 165, 233, 0.08); color: var(--blue-glow);
+            border: 1px solid rgba(14, 165, 233, 0.15);
+        }
+        .program-card:not(.featured) .program-btn:hover { background: rgba(14, 165, 233, 0.15); border-color: rgba(14,165,233,0.3); }
+        .program-card.featured .program-btn {
+            background: linear-gradient(135deg, var(--blue-primary), var(--cyan));
+            color: var(--dark); box-shadow: 0 4px 25px rgba(14, 165, 233, 0.3);
+        }
+        .program-card.featured .program-btn:hover { box-shadow: 0 8px 40px rgba(14, 165, 233, 0.45); transform: translateY(-2px); }
+
+        .program-alt {
+            font-size: 0.78rem; color: var(--gray-dim); text-align: center;
+            padding: 0.7rem 0; margin-bottom: 0.8rem;
+            border-top: 1px dashed var(--dark-border);
+        }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+
+        .volume-tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; width: 100%; }
+        .vol-tier {
+            background: rgba(14, 165, 233, 0.06); border: 1px solid rgba(14, 165, 233, 0.15);
+            border-radius: var(--radius-sm); padding: 0.8rem 1rem;
+            text-align: center; transition: var(--transition); cursor: pointer;
+        }
+        .vol-tier.active {
+            border-color: var(--blue-primary); background: rgba(14, 165, 233, 0.15);
+            box-shadow: 0 0 20px rgba(14,165,233,0.12);
+        }
+        .vol-tier:hover { border-color: var(--blue-primary); }
+        .vol-amount {
+            display: block; font-family: var(--font-display); font-weight: 700;
+            font-size: 0.85rem; color: var(--white); margin-bottom: 0.15rem;
+        }
+        .vol-discount {
+            font-family: 'Sora', var(--font-display); font-weight: 800;
+            font-size: 1.1rem; color: var(--blue-glow);
+        }
+
+        .bundle-banner {
+            max-width: 1400px; margin: 3rem auto 0;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.06) 0%, rgba(34, 211, 238, 0.04) 100%);
+            border: 1px solid rgba(14, 165, 233, 0.2); border-radius: var(--radius);
+            padding: 2.5rem 3rem; display: flex; flex-direction: column;
+            align-items: center; text-align: center; gap: 1.5rem;
+            position: relative; overflow: hidden;
+        }
+        .bundle-banner::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue-primary), var(--cyan), transparent);
+        }
+        .bundle-text h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--white); }
+        .bundle-text h3 span { color: var(--blue-glow); }
+        .bundle-text p { color: var(--gray); font-size: 0.95rem; margin-top: 0.3rem; }
+
+        /* ═══════ DISCOUNT / EMAIL ═══════ */
+        .discount-container {
+            max-width: 1000px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+            border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow-card), 0 0 80px rgba(14, 165, 233, 0.08);
+        }
+        .discount-left {
+            background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-deep) 100%);
+            padding: 4rem 3rem; color: var(--white);
+            display: flex; flex-direction: column; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .discount-left::before {
+            content: ''; position: absolute; top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+            animation: discountShine 8s ease-in-out infinite;
+        }
+        @keyframes discountShine { 0%,100% { transform:translate(0,0); } 50% { transform:translate(-20%,20%); } }
+        .discount-percentage { font-family: var(--font-display); font-weight: 900; font-size: 6rem; line-height: 1; letter-spacing: -4px; position: relative; }
+        .discount-percentage span { font-size: 3rem; }
+        .discount-label { font-family: var(--font-display); font-weight: 700; font-size: 1.8rem; margin-top: 0.5rem; }
+        .discount-subtitle { font-size: 1rem; opacity: 0.85; margin-top: 1rem; line-height: 1.5; }
+
+        .discount-right {
+            background: var(--dark-card); padding: 4rem 3rem;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .discount-right h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .discount-right > p { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
+        .discount-steps {
+            display: flex; gap: 0.8rem; margin-bottom: 2rem;
+        }
+        .discount-step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--gray); }
+        .step-num {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: rgba(14, 165, 233, 0.1); color: var(--blue-glow);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-weight: 700; font-size: 0.75rem;
+        }
+        .discount-step.active .step-num { background: var(--blue-primary); color: var(--dark); }
+
+        .email-form { display: flex; flex-direction: column; gap: 1rem; }
+        .email-form input {
+            width: 100%; padding: 1rem 1.2rem;
+            background: var(--dark-surface); border: 1px solid var(--dark-border);
+            border-radius: var(--radius-sm); color: var(--white);
+            font-family: var(--font-body); font-size: 1rem;
+            transition: var(--transition); outline: none;
+        }
+        .email-form input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+        .email-form input::placeholder { color: var(--gray-dim); }
+        .email-form .btn { width: 100%; justify-content: center; }
+        .email-terms { font-size: 0.78rem; color: var(--gray-dim); text-align: center; }
+
+        .already-claimed {
+            background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: var(--radius-sm); padding: 1.5rem; text-align: center;
+        }
+        .already-claimed p { color: var(--blue-glow); font-size: 0.95rem; margin-bottom: 0; }
+
+        /* ═══════ QR MODAL ═══════ */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            z-index: 10000; display: none; align-items: center; justify-content: center; padding: 2rem;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        .qr-modal {
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            border-radius: var(--radius); max-width: 480px; width: 100%;
+            padding: 3rem; text-align: center; position: relative;
+            animation: modalSlide 0.4s ease-out;
+            box-shadow: 0 0 100px rgba(14, 165, 233, 0.1);
+        }
+        @keyframes modalSlide { from { opacity:0; transform:translateY(40px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+        .modal-close {
+            position: absolute; top: 1rem; right: 1rem;
+            background: none; border: none; color: var(--gray);
+            font-size: 1.5rem; cursor: pointer; width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: var(--transition);
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+        .modal-success-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: rgba(16, 185, 129, 0.1); color: var(--success);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem; font-size: 1.8rem;
+        }
+        .qr-modal h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .qr-modal > p { color: var(--gray); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .qr-container {
+            background: white; border-radius: var(--radius-sm);
+            padding: 1.5rem; display: inline-block; margin-bottom: 1.5rem;
+        }
+        .qr-container canvas, .qr-container img { display: block; }
+        .discount-code {
+            background: var(--dark-surface); border: 1px dashed var(--dark-border);
+            border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.5rem;
+        }
+        .discount-code label { font-size: 0.78rem; color: var(--gray-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .discount-code .code {
+            font-family: var(--font-display); font-weight: 800; font-size: 1.4rem;
+            color: var(--blue-glow); letter-spacing: 2px; margin-top: 0.3rem;
+        }
+        .modal-instructions { font-size: 0.85rem; color: var(--gray-dim); border-top: 1px solid var(--dark-border); padding-top: 1rem; }
+
+        /* ═══════ INFO ═══════ */
+        .info-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .info-card {
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            border-radius: var(--radius); padding: 3rem;
+        }
+        .info-card h3 {
+            font-family: var(--font-display); font-weight: 700; font-size: 1.4rem;
+            margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .hours-list { list-style: none; }
+        .hours-list li {
+            display: flex; justify-content: space-between; padding: 0.8rem 0;
+            border-bottom: 1px solid var(--dark-border); font-size: 0.95rem;
+        }
+        .hours-list li:last-child { border-bottom: none; }
+        .hours-list .day { color: var(--gray); }
+        .hours-list .time { font-family: var(--font-display); font-weight: 600; }
+        .hours-list li.today {
+            background: rgba(14, 165, 233, 0.05);
+            margin: 0 -1rem; padding: 0.8rem 1rem; border-radius: 8px;
+        }
+        .hours-list li.today .day { color: var(--blue-glow); font-weight: 600; }
+
+        .contact-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--dark-border); }
+        .contact-item:last-child { border-bottom: none; }
+        .contact-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(14, 165, 233, 0.1);
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .contact-item .label { font-size: 0.8rem; color: var(--gray-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .contact-item .value { font-family: var(--font-display); font-weight: 600; margin-top: 0.1rem; }
+        .contact-item a { color: var(--white); text-decoration: none; }
+        .contact-item a:hover { color: var(--blue-glow); }
+
+        .payment-grid { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.5rem; }
+        .payment-item {
+            background: var(--dark-surface); border: 1px solid var(--dark-border);
+            border-radius: var(--radius-sm); padding: 0.8rem 1.2rem;
+            font-size: 0.85rem; color: var(--gray); transition: var(--transition);
+        }
+        .payment-item:hover { border-color: var(--blue-primary); color: var(--white); }
+
+        .map-embed { width: 100%; height: 250px; border-radius: var(--radius-sm); border: 1px solid var(--dark-border); margin-top: 1.5rem; overflow: hidden; }
+        .map-embed iframe { width: 100%; height: 100%; border: none; filter: brightness(0.7) contrast(1.2) saturate(0); }
+
+        /* ═══════ FLOATING CTA ═══════ */
+        .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 900; display: none; }
+        .floating-cta.visible { display: block; animation: floatIn 0.5s ease-out; }
+        @keyframes floatIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .floating-card {
+            background: var(--dark-card); border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: var(--radius); padding: 1.5rem; width: 320px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(14, 165, 233, 0.1);
+            position: relative;
+        }
+        .floating-card-close {
+            position: absolute; top: 0.8rem; right: 0.8rem;
+            background: none; border: none; color: var(--gray-dim); cursor: pointer; font-size: 1.2rem;
+        }
+        .floating-card h4 {
+            font-family: var(--font-display); font-weight: 700; font-size: 1.1rem;
+            margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .floating-card p { color: var(--gray); font-size: 0.85rem; margin-bottom: 1rem; }
+        .mini-form { display: flex; gap: 0.5rem; }
+        .mini-form input {
+            flex: 1; padding: 0.7rem 1rem; background: var(--dark-surface);
+            border: 1px solid var(--dark-border); border-radius: 8px;
+            color: var(--white); font-size: 0.85rem; outline: none;
+        }
+        .mini-form input:focus { border-color: var(--blue-primary); }
+        .mini-form button {
+            padding: 0.7rem 1rem; background: var(--blue-primary); border: none;
+            border-radius: 8px; color: var(--white); font-family: var(--font-display);
+            font-weight: 700; font-size: 0.85rem; cursor: pointer; white-space: nowrap; transition: var(--transition);
+        }
+        .mini-form button:hover { background: var(--blue-glow); }
+
+        /* ═══════ FOOTER ═══════ */
+        footer { background: var(--dark-surface); border-top: 1px solid var(--dark-border); padding: 4rem 2rem 2rem; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+        .footer-brand p { color: var(--gray-dim); font-size: 0.9rem; line-height: 1.6; margin-top: 1rem; }
+        .footer-social { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+        .footer-social a {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray); text-decoration: none; transition: var(--transition); font-size: 1.1rem;
+        }
+        .footer-social a:hover { border-color: var(--blue-primary); color: var(--blue-glow); transform: translateY(-3px); }
+        .footer-col h4 { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; margin-bottom: 1.2rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.6rem; }
+        .footer-col ul a { color: var(--gray-dim); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+        .footer-col ul a:hover { color: var(--blue-glow); }
+        .footer-bottom {
+            max-width: 1200px; margin: 3rem auto 0; padding-top: 2rem;
+            border-top: 1px solid var(--dark-border);
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.82rem; color: var(--gray-dim);
+        }
+
+        /* ═══════ SCROLL ANIMATIONS ═══════ */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ═══════ RESPONSIVE ═══════ */
+        @media (max-width: 1024px) {
+            .programs-grid { grid-template-columns: repeat(3, 1fr); }
+            .program-card.featured { transform: none; }
+            .program-card.featured:hover { transform: translateY(-8px); }
+            .masonry-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: block; }
+            .nav-links.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 100%; left: 0; right: 0;
+                background: rgba(10, 14, 23, 0.98); backdrop-filter: blur(20px);
+                padding: 2rem; gap: 1.5rem; border-bottom: 1px solid var(--dark-border);
+            }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
+            .hero {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+                min-height: auto;
+            }
+            .hero-left {
+                order: 1;
+                padding: 7rem 1.8rem 2.5rem;
+                background: linear-gradient(160deg, #0c1520 0%, #0f1a2e 40%, #0a1628 100%);
+                text-align: left;
+                position: relative;
+                overflow: hidden;
+            }
+            .hero-left::after {
+                content: ''; position: absolute; inset: 0; pointer-events: none;
+                background:
+                    radial-gradient(circle at 80% 20%, rgba(14,165,233,0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(34,211,238,0.06) 0%, transparent 40%);
+            }
+            .hero-left .hero-logo { width: 160px; margin-bottom: 1.2rem; position: relative; z-index: 1; }
+            .hero-left .hero-badge { margin-bottom: 1.2rem; position: relative; z-index: 1; }
+            .hero-left h1 { font-size: 2.2rem; letter-spacing: -1px; position: relative; z-index: 1; }
+            .hero-left .hero-tagline { margin-bottom: 2rem; font-size: 0.95rem; position: relative; z-index: 1; }
+            .hero-left .hero-buttons { justify-content: flex-start; position: relative; z-index: 1; }
+            .hero-right {
+                order: 2;
+                position: relative;
+                height: 55vh;
+            }
+            .hero-right::before {
+                background:
+                    linear-gradient(180deg, #0a1628 0%, transparent 20%, transparent 85%, rgba(10,14,23,0.5) 100%) !important;
+            }
+            .hero-right video, .hero-right img { filter: brightness(0.85) saturate(1.2); }
+            .hero-bubbles { z-index: 1; }
+            .services-grid, .programs-grid { grid-template-columns: 1fr; }
+            .discount-container, .info-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .masonry-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 200px; }
+            .masonry-grid .m-wide { grid-column: span 1; }
+            .bundle-banner { flex-direction: column; text-align: center; }
+            .photo-card { flex: 0 0 270px; }
+        }
+        @media (max-width: 480px) {
+            .stats-inner { grid-template-columns: 1fr 1fr; }
+            .footer-inner { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .discount-left { padding: 3rem 2rem; }
+            .discount-right { padding: 2.5rem 2rem; }
+            .discount-percentage { font-size: 4rem; }
+            .floating-card { width: 280px; }
+            .masonry-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+            .masonry-grid .m-tall { grid-row: span 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-bg"></div>
+
+    <!-- ═══════ NAVIGATION ═══════ -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <img src="logo.png" alt="Carwash Ermelo">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#resultaten">Resultaten</a></li>
+                <li><a href="#diensten">Diensten</a></li>
+                <li><a href="#wasbonnen">Wasprogramma's</a></li>
+                <li><a href="#korting">Korting</a></li>
+                <li><a href="#info">Contact</a></li>
+                <li><a href="#wasbonnen" class="nav-cta">Bestel Wasbonnen</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════ HERO ═══════ -->
+    <section class="hero" id="heroSection">
+        <div class="hero-bubbles">
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        </div>
+        <div class="hero-left">
+            <img src="logo.png" alt="Carwash Ermelo" class="hero-logo">
+            <div class="hero-badge">
+                <div class="pulse"></div>
+                Nu geopend — 7 dagen per week
+            </div>
+            <h1>De schoonste auto<br><span class="thin">voor de beste prijs</span></h1>
+            <p class="hero-tagline">
+                De modernste kettingwasstraat van de Veluwe. Professionele wasbeurt in enkele minuten, altijd een stralend resultaat.
+            </p>
+            <div class="hero-buttons">
+                <a href="#wasbonnen" class="btn btn-primary">Wasbonnen Bestellen</a>
+                <a href="#korting" class="btn btn-outline">10% Korting Pakken</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <video autoplay muted loop playsinline poster="fotos/screely-instagram-20260409-201453.png">
+                <source src="hero-video.mp4" type="video/mp4">
+                <img src="fotos/screely-instagram-20260409-201453.png" alt="Carwash Ermelo">
+            </video>
+        </div>
+    </section>
+
+    <!-- ═══════ STATS ═══════ -->
+    <div class="stats-bar reveal">
+        <div class="stats-inner">
+            <div class="stat">
+                <div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <div class="stat-number">90+</div>
+                <div class="stat-label">Auto's per uur</div>
+            </div>
+            <div class="stat">
+                <div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5a1 1 0 01-1 1h-1"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+                <div class="stat-number">5</div>
+                <div class="stat-label">Tegelijk in de wasstraat</div>
+            </div>
+            <div class="stat">
+                <div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                <div class="stat-number">7/7</div>
+                <div class="stat-label">Dagen per week open</div>
+            </div>
+            <div class="stat">
+                <div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"/></svg></div>
+                <div class="stat-number">5</div>
+                <div class="stat-label">Wasprogramma's</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ PHOTO GALLERY ═══════ -->
+    <section class="gallery-section" id="resultaten">
+        <div class="gallery-header reveal">
+            <div>
+                <div class="section-label">Onze Resultaten</div>
+                <h2 class="section-title">Elke auto verdient deze glans</h2>
+                <p class="section-desc" style="margin-top: 0.5rem;">Bekijk het verschil. Elke dag rijden honderden tevreden klanten met een stralende auto bij ons weg.</p>
+            </div>
+            <a href="https://instagram.com/carwash_ermelo" target="_blank" rel="noopener" class="ig-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                Volg ons op Instagram
+            </a>
+        </div>
+
+        <div class="photo-scroll" id="photoScroll">
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201453.png" alt="Audi RS in de wasstraat"><div class="photo-overlay"><span>Audi RS — Stralend resultaat</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201601.png" alt="BMW M4 in de wasstraat"><div class="photo-overlay"><span>BMW M4 — Java Green</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201645.png" alt="Porsche Taycan in de wasstraat"><div class="photo-overlay"><span>Porsche Taycan — Perfecte glans</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201711.png" alt="BMW 8 Serie in de wasstraat"><div class="photo-overlay"><span>BMW 8 Serie — Premium wash</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201740.png" alt="Audi met gekleurd schuim"><div class="photo-overlay"><span>Gekleurd schuim in actie</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201832.png" alt="Porsche 911 bij Carwash Ermelo"><div class="photo-overlay"><span>Welkom bij Carwash Ermelo</span></div></div>
+        </div>
+
+        <div class="masonry-grid" style="margin-top: 3rem;">
+            <div class="m-item m-tall reveal"><img src="fotos/screely-instagram-20260409-201711.png" alt="BMW 8 Serie"><div class="m-overlay"><span>BMW 8 Serie — Premium wash</span></div></div>
+            <div class="m-item reveal reveal-delay-1"><img src="fotos/screely-instagram-20260409-201740.png" alt="Gekleurd schuim"><div class="m-overlay"><span>Gekleurd schuim in actie</span></div></div>
+            <div class="m-item reveal reveal-delay-2"><img src="fotos/screely-instagram-20260409-201645.png" alt="Porsche Taycan"><div class="m-overlay"><span>Porsche Taycan</span></div></div>
+            <div class="m-item m-wide reveal reveal-delay-3"><img src="fotos/screely-instagram-20260409-201832.png" alt="Welkom bij Carwash Ermelo"><div class="m-overlay"><span>Welkom bij Carwash Ermelo</span></div></div>
+            <div class="m-item reveal reveal-delay-4"><img src="fotos/screely-instagram-20260409-201601.png" alt="BMW M4"><div class="m-overlay"><span>BMW M4 — Java Green</span></div></div>
+        </div>
+    </section>
+
+    <!-- ═══════ SERVICES ═══════ -->
+    <section id="diensten">
+        <div class="section-header reveal">
+            <div class="section-label">Waarom Carwash Ermelo</div>
+            <h2 class="section-title">Drie pijlers waar wij voor staan</h2>
+            <p class="section-desc">Onze moderne kettingwasstraat combineert snelheid, kwaliteit en een eerlijke prijs.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal reveal-delay-1">
+                <div class="service-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"/></svg></div>
+                <h3>Premium Kwaliteit</h3>
+                <p>Handmatige voorbehandeling, speciaal velgenreiniging systeem, soft shampoo & wax voor een perfecte glans. Drie varianten gekleurd schuim.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-2">
+                <div class="service-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <h3>Razendsnelle Service</h3>
+                <p>Met een capaciteit van 90+ auto's per uur en maximaal 5 voertuigen tegelijk in de wasstraat, bent u binnen enkele minuten klaar.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-3">
+                <div class="service-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                <h3>Beste Prijs-Kwaliteit</h3>
+                <p>Betaalbare tarieven zonder concessies aan kwaliteit. Pin, contant, tankpassen — wij accepteren bijna alle betaalmethoden.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ WASBONNEN ═══════ -->
+    <section id="wasbonnen">
+        <div class="section-header reveal">
+            <div class="section-label">Wasprogramma's & Wasbonnen</div>
+            <h2 class="section-title">Kies uw wasprogramma</h2>
+            <p class="section-desc">Van een snelle basiswas tot de ultieme verwenbeurt. Bestel wasbonnen en profiteer van aantrekkelijke kortingen.</p>
+        </div>
+        <div class="programs-grid">
+            <!-- Brons -->
+            <div class="program-card reveal reveal-delay-1">
+                <div class="program-tier">Brons</div>
+                <div class="program-name">Brons</div>
+                <div class="program-price"><span class="currency">&euro;</span><span class="amount">9,50</span></div>
+                <div class="program-price-note">Per wasbeurt</div>
+                <div class="program-divider"></div>
+                <ul class="program-features">
+                    <li><span class="check">&#10003;</span> Wassen-Drogen</li>
+                    <li><span class="check">&#10003;</span> Velgen reinigen</li>
+                    <li><span class="cross">&#10005;</span> Voorbehandeling</li>
+                    <li><span class="cross">&#10005;</span> Schuimwax</li>
+                    <li><span class="cross">&#10005;</span> Bodemreinigen</li>
+                    <li><span class="cross">&#10005;</span> Bodemprotectie</li>
+                </ul>
+                <div class="program-alt">Zonder velgenreiniging &euro;7,50</div>
+                <a href="#korting" class="program-btn">Bestellen</a>
+            </div>
+
+            <!-- Zilver -->
+            <div class="program-card reveal reveal-delay-2">
+                <div class="program-tier">Zilver</div>
+                <div class="program-name">Zilver</div>
+                <div class="program-price"><span class="currency">&euro;</span><span class="amount">11,00</span></div>
+                <div class="program-price-note">Per wasbeurt</div>
+                <div class="program-divider"></div>
+                <ul class="program-features">
+                    <li><span class="check">&#10003;</span> Voorbehandeling</li>
+                    <li><span class="check">&#10003;</span> Wassen-Drogen</li>
+                    <li><span class="check">&#10003;</span> Schuimwax</li>
+                    <li><span class="check">&#10003;</span> Velgen reinigen</li>
+                    <li><span class="cross">&#10005;</span> Bodemreinigen</li>
+                    <li><span class="cross">&#10005;</span> Bodemprotectie</li>
+                </ul>
+                <div class="program-alt">Zonder velgenreiniging &euro;8,50</div>
+                <a href="#korting" class="program-btn">Bestellen</a>
+            </div>
+
+            <!-- Goud -->
+            <div class="program-card reveal reveal-delay-3">
+                <div class="program-tier">Goud</div>
+                <div class="program-name">Goud</div>
+                <div class="program-price"><span class="currency">&euro;</span><span class="amount">13,00</span></div>
+                <div class="program-price-note">Per wasbeurt</div>
+                <div class="program-divider"></div>
+                <ul class="program-features">
+                    <li><span class="check">&#10003;</span> Voorbehandeling</li>
+                    <li><span class="check">&#10003;</span> Wassen-Drogen</li>
+                    <li><span class="check">&#10003;</span> Schuimwax</li>
+                    <li><span class="check">&#10003;</span> Bodemreinigen</li>
+                    <li><span class="check">&#10003;</span> Handmatig velgen reinigen</li>
+                    <li><span class="cross">&#10005;</span> Bodemprotectie</li>
+                </ul>
+                <div class="program-alt">Zonder velgenreiniging &euro;9,50</div>
+                <a href="#korting" class="program-btn">Bestellen</a>
+            </div>
+
+            <!-- Briljant -->
+            <div class="program-card reveal reveal-delay-4">
+                <div class="program-tier">Briljant</div>
+                <div class="program-name">Briljant</div>
+                <div class="program-price"><span class="currency">&euro;</span><span class="amount">15,00</span></div>
+                <div class="program-price-note">Per wasbeurt</div>
+                <div class="program-divider"></div>
+                <ul class="program-features">
+                    <li><span class="check">&#10003;</span> Voorbehandeling intensief</li>
+                    <li><span class="check">&#10003;</span> Wassen-Drogen</li>
+                    <li><span class="check">&#10003;</span> Hot Wax</li>
+                    <li><span class="check">&#10003;</span> Bodemreinigen</li>
+                    <li><span class="check">&#10003;</span> Bodemprotectie</li>
+                    <li><span class="check">&#10003;</span> Handmatig velgen reinigen</li>
+                </ul>
+                <div class="program-alt">Zonder velgenreiniging &euro;11,50</div>
+                <a href="#korting" class="program-btn">Bestellen</a>
+            </div>
+
+            <!-- Carwash Special -->
+            <div class="program-card featured reveal reveal-delay-5">
+                <div class="program-badge">Beste Keus</div>
+                <div class="program-tier">Special</div>
+                <div class="program-name">Carwash Special</div>
+                <div class="program-price"><span class="currency">&euro;</span><span class="amount">17,50</span></div>
+                <div class="program-price-note">Per wasbeurt</div>
+                <div class="program-divider"></div>
+                <ul class="program-features">
+                    <li><span class="check">&#10003;</span> Voorbehandeling intensief</li>
+                    <li><span class="check">&#10003;</span> Wassen-Drogen</li>
+                    <li><span class="check">&#10003;</span> Power Polish</li>
+                    <li><span class="check">&#10003;</span> Bodemreinigen</li>
+                    <li><span class="check">&#10003;</span> Bodemprotectie</li>
+                    <li><span class="check">&#10003;</span> Triple Foam</li>
+                    <li><span class="check">&#10003;</span> Handmatig velgen reinigen</li>
+                </ul>
+                <div class="program-alt">Zonder velgenreiniging &euro;14,00</div>
+                <a href="#korting" class="program-btn">Bestellen</a>
+            </div>
+        </div>
+
+        <!-- Wasbonnen volumekorting -->
+        <div class="bundle-banner reveal">
+            <div class="bundle-text">
+                <h3>Bestel wasbonnen & bespaar tot <span>15%</span></h3>
+                <p>Hoe meer wasbonnen, hoe hoger uw korting. Geldig voor alle programma's.</p>
+            </div>
+            <div class="volume-tiers" id="volTiers">
+                <div class="vol-tier"><span class="vol-amount">25 stuks</span><span class="vol-discount">5%</span></div>
+                <div class="vol-tier"><span class="vol-amount">50 stuks</span><span class="vol-discount">8%</span></div>
+                <div class="vol-tier"><span class="vol-amount">100 stuks</span><span class="vol-discount">10%</span></div>
+                <div class="vol-tier"><span class="vol-amount">250 stuks</span><span class="vol-discount">15%</span></div>
+            </div>
+            <a href="mailto:info@carwash-ermelo.nl?subject=Wasbonnen%20bestellen" class="btn btn-primary">Offerte Aanvragen</a>
+        </div>
+    </section>
+
+    <!-- ═══════ DISCOUNT / EMAIL ═══════ -->
+    <section id="korting">
+        <div class="section-header reveal">
+            <div class="section-label">Exclusief Aanbod</div>
+            <h2 class="section-title">Uw eerste wasbeurt met korting</h2>
+            <p class="section-desc">Ontvang direct een persoonlijke kortingscode. Eenmalig, exclusief voor u.</p>
+        </div>
+        <div class="discount-container reveal">
+            <div class="discount-left">
+                <div class="discount-percentage">10<span>%</span></div>
+                <div class="discount-label">Korting</div>
+                <div class="discount-subtitle">Op uw eerstvolgende wasbeurt bij Carwash Ermelo. Geldig op alle wasprogramma's. Toon de QR-code bij de kassa.</div>
+            </div>
+            <div class="discount-right" id="discountForm">
+                <div class="discount-steps">
+                    <div class="discount-step active"><span class="step-num">1</span> Email invullen</div>
+                    <div class="discount-step"><span class="step-num">2</span> QR-code ontvangen</div>
+                    <div class="discount-step"><span class="step-num">3</span> Inwisselen</div>
+                </div>
+                <h3>Claim uw 10% korting</h3>
+                <p>Vul uw e-mailadres in en ontvang direct een unieke QR-code. Eenmalig te gebruiken, direct geldig.</p>
+                <form class="email-form" id="emailForm" autocomplete="off">
+                    <input type="text" id="nameInput" placeholder="Uw naam" required>
+                    <input type="email" id="emailInput" placeholder="Uw e-mailadres" required>
+                    <button type="submit" class="btn btn-primary">Ontvang Mijn Kortingscode</button>
+                </form>
+                <p class="email-terms">Wij respecteren uw privacy. Geen spam, alleen relevante aanbiedingen.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ INFO ═══════ -->
+    <section id="info">
+        <div class="section-header reveal">
+            <div class="section-label">Bezoek Ons</div>
+            <h2 class="section-title">Openingstijden & Contact</h2>
+        </div>
+        <div class="info-grid">
+            <div class="info-card reveal reveal-delay-1">
+                <h3><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Openingstijden</h3>
+                <ul class="hours-list" id="hoursList">
+                    <li><span class="day">Maandag</span><span class="time">08:30 — 18:00</span></li>
+                    <li><span class="day">Dinsdag</span><span class="time">08:30 — 18:00</span></li>
+                    <li><span class="day">Woensdag</span><span class="time">08:30 — 18:00</span></li>
+                    <li><span class="day">Donderdag</span><span class="time">08:30 — 18:00</span></li>
+                    <li><span class="day">Vrijdag</span><span class="time">08:30 — 18:00</span></li>
+                    <li><span class="day">Zaterdag</span><span class="time">08:00 — 18:00</span></li>
+                    <li><span class="day">Zondag</span><span class="time">10:00 — 17:00</span></li>
+                </ul>
+            </div>
+            <div class="info-card reveal reveal-delay-2">
+                <h3><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Contactgegevens</h3>
+                <div class="contact-item">
+                    <div class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                    <div><div class="label">Adres</div><div class="value">Harderwijkerweg 158, 3852 AH Ermelo</div></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+                    <div><div class="label">Telefoon</div><div class="value"><a href="tel:0341433793">0341 - 433 793</a></div></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-glow)" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                    <div><div class="label">E-mail</div><div class="value"><a href="mailto:info@carwash-ermelo.nl">info@carwash-ermelo.nl</a></div></div>
+                </div>
+                <h4 style="margin-top: 2rem; font-family: var(--font-display); font-size: 0.95rem;">Betaalmogelijkheden</h4>
+                <div class="payment-grid">
+                    <div class="payment-item">Pin</div>
+                    <div class="payment-item">Contant</div>
+                    <div class="payment-item">Multitankcard</div>
+                    <div class="payment-item">Tankpas</div>
+                    <div class="payment-item">Travelcard</div>
+                    <div class="payment-item">Movemove</div>
+                </div>
+                <div class="map-embed">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2434.5!2d5.6!3d52.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTLCsDE4JzAwLjAiTiA1wrAzNicwMC4wIkU!5e0!3m2!1snl!2snl!4v1" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="#" class="logo"><img src="logo.png" alt="Carwash Ermelo"></a>
+                <p>De schoonste auto voor de beste prijs. Al jaren de vertrouwde carwash op de Veluwe voor particulier en zakelijk.</p>
+                <div class="footer-social">
+                    <a href="https://facebook.com/carwashermelo158" target="_blank" rel="noopener">f</a>
+                    <a href="https://instagram.com/carwash_ermelo" target="_blank" rel="noopener">ig</a>
+                </div>
+            </div>
+            <div class="footer-col"><h4>Navigatie</h4><ul><li><a href="#resultaten">Resultaten</a></li><li><a href="#diensten">Diensten</a></li><li><a href="#wasbonnen">Wasprogramma's</a></li><li><a href="#korting">Korting</a></li><li><a href="#info">Contact</a></li></ul></div>
+            <div class="footer-col"><h4>Service</h4><ul><li><a href="#wasbonnen">Wasbonnen Bestellen</a></li><li><a href="mailto:info@carwash-ermelo.nl">Zakelijke Offerte</a></li></ul></div>
+            <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:0341433793">0341 - 433 793</a></li><li><a href="mailto:info@carwash-ermelo.nl">info@carwash-ermelo.nl</a></li><li><a href="#">Harderwijkerweg 158</a></li><li><a href="#">3852 AH Ermelo</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Carwash Ermelo. Alle rechten voorbehouden.</span>
+            <span>Algemene voorwaarden</span>
+        </div>
+    </footer>
+
+    <!-- ═══════ FLOATING CTA ═══════ -->
+    <div class="floating-cta" id="floatingCta">
+        <div class="floating-card">
+            <button class="floating-card-close" id="floatingClose">&times;</button>
+            <h4>10% Korting</h4>
+            <p>Laat uw e-mail achter en ontvang direct een eenmalige kortingscode voor uw volgende wasbeurt.</p>
+            <div class="mini-form">
+                <input type="email" id="floatingEmail" placeholder="Uw e-mail">
+                <button id="floatingSubmit">Claim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ QR MODAL ═══════ -->
+    <div class="modal-overlay" id="qrModal">
+        <div class="qr-modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-success-icon">&#10003;</div>
+            <h3>Uw kortingscode is klaar!</h3>
+            <p>Toon deze QR-code aan de kassa van Carwash Ermelo om 10% korting te ontvangen op uw wasbeurt.</p>
+            <div class="qr-container" id="qrCode"></div>
+            <div class="discount-code">
+                <label>Uw unieke code</label>
+                <div class="code" id="discountCodeDisplay">—</div>
+            </div>
+            <div class="modal-instructions">Deze code is eenmalig en persoonsgebonden. Maak een screenshot om de code te bewaren.</div>
+        </div>
+    </div>
+
+    <!-- ═══════ JAVASCRIPT ═══════ -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Nav scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 50));
+
+        // Mobile menu
+        document.getElementById('menuToggle').addEventListener('click', () => document.getElementById('navLinks').classList.toggle('open'));
+        document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+
+        // Hero load
+        setTimeout(() => document.getElementById('heroSection').classList.add('loaded'), 100);
+
+        // Scroll reveal
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+        // Count-up animation for stats
+        function countUp(el, target, suffix) {
+            const dur = 2000;
+            const start = performance.now();
+            const isFloat = target % 1 !== 0;
+            function tick(now) {
+                const p = Math.min((now - start) / dur, 1);
+                const ease = 1 - Math.pow(1 - p, 4); // easeOutQuart
+                const val = Math.round(ease * target);
+                el.textContent = val + (suffix || '');
+                if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        const statsObserver = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const nums = e.target.querySelectorAll('.stat-number');
+                    nums.forEach(n => {
+                        const text = n.textContent.trim();
+                        const match = text.match(/^(\d+)/);
+                        if (match) {
+                            const target = parseInt(match[1]);
+                            const suffix = text.replace(match[1], '');
+                            n.textContent = '0' + suffix;
+                            countUp(n, target, suffix);
+                        }
+                    });
+                    statsObserver.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        const statsBar = document.querySelector('.stats-inner');
+        if (statsBar) statsObserver.observe(statsBar);
+
+        // Today highlight
+        const dayMap = [6,0,1,2,3,4,5];
+        const hl = document.getElementById('hoursList');
+        if (hl) { const items = hl.querySelectorAll('li'); if (items[dayMap[new Date().getDay()]]) items[dayMap[new Date().getDay()]].classList.add('today'); }
+
+        // Photo scroll drag
+        const ps = document.getElementById('photoScroll');
+        if (ps) {
+            let isDown=false, startX, scrollLeft;
+            ps.addEventListener('mousedown', e => { isDown=true; startX=e.pageX-ps.offsetLeft; scrollLeft=ps.scrollLeft; });
+            ps.addEventListener('mouseleave', () => isDown=false);
+            ps.addEventListener('mouseup', () => isDown=false);
+            ps.addEventListener('mousemove', e => { if(!isDown) return; e.preventDefault(); ps.scrollLeft=scrollLeft-(e.pageX-ps.offsetLeft-startX)*1.5; });
+        }
+
+        // Water droplets
+        function createDroplet() {
+            const d = document.createElement('div');
+            d.className = 'droplet';
+            d.style.left = Math.random()*100+'vw';
+            d.style.top = '-10px';
+            d.style.opacity = Math.random()*0.4+0.1;
+            d.style.width = d.style.height = (Math.random()*3+2)+'px';
+            document.body.appendChild(d);
+            const anim = d.animate([
+                { transform:'translateY(0) translateX(0)', opacity: parseFloat(d.style.opacity) },
+                { transform:`translateY(${innerHeight+20}px) translateX(${(Math.random()-0.5)*100}px)`, opacity:0 }
+            ], { duration: Math.random()*4000+3000, easing:'ease-in' });
+            anim.onfinish = () => d.remove();
+        }
+        setInterval(createDroplet, 800);
+
+        // Discount system
+        function genCode() {
+            const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            return 'CWE-'+[0,1,2].map(()=>{let s='';for(let i=0;i<4;i++)s+=c[Math.random()*c.length|0];return s;}).join('-');
+        }
+        function claimed() { return localStorage.getItem('cwe_discount_claimed')==='true'; }
+        function markClaimed(email, code) {
+            localStorage.setItem('cwe_discount_claimed','true');
+            localStorage.setItem('cwe_discount_email',email);
+            localStorage.setItem('cwe_discount_code',code);
+            localStorage.setItem('cwe_discount_time',new Date().toISOString());
+            const list=JSON.parse(localStorage.getItem('cwe_emails')||'[]');
+            list.push({email,code,time:new Date().toISOString(),used:false});
+            localStorage.setItem('cwe_emails',JSON.stringify(list));
+        }
+
+        function showQR(code) {
+            const qr=document.getElementById('qrCode'); qr.innerHTML='';
+            new QRCode(qr, {
+                text:JSON.stringify({type:'CWE_DISCOUNT',code,discount:'10%',valid:'single_use',business:'Carwash Ermelo'}),
+                width:200, height:200, colorDark:'#0a0e17', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H
+            });
+            document.getElementById('discountCodeDisplay').textContent=code;
+            document.getElementById('qrModal').classList.add('active');
+            document.body.style.overflow='hidden';
+        }
+
+        function showClaimed(el) {
+            const code=localStorage.getItem('cwe_discount_code');
+            el.innerHTML='<div class="already-claimed"><p>U heeft al een kortingscode ontvangen.</p><p style="margin-top:0.5rem;color:var(--gray)">Uw code: <strong style="color:var(--blue-glow);font-family:var(--font-display)">'+(code||'—')+'</strong></p><button onclick="window._showQR()" class="btn btn-outline" style="margin-top:1rem;padding:0.6rem 1.5rem;font-size:0.9rem">QR-code opnieuw bekijken</button></div>';
+        }
+        window._showQR = () => { const c=localStorage.getItem('cwe_discount_code'); if(c) showQR(c); };
+
+        const formWrap=document.getElementById('discountForm');
+        const form=document.getElementById('emailForm');
+
+        if (claimed() && formWrap) {
+            const f=formWrap.querySelector('.email-form');
+            const h=formWrap.querySelector('h3');
+            const p=formWrap.querySelector('p:not(.email-terms)');
+            const s=formWrap.querySelector('.discount-steps');
+            const t=formWrap.querySelector('.email-terms');
+            if(f){const w=document.createElement('div');w.style.marginTop='1rem';showClaimed(w);f.replaceWith(w);}
+            if(h) h.textContent='Bedankt voor uw registratie!';
+            if(p) p.textContent='U kunt uw bestaande kortingscode hieronder bekijken.';
+            if(s) s.remove(); if(t) t.remove();
+        }
+
+        if (form) {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                if(claimed()) return alert('U heeft al een kortingscode!');
+                const name=document.getElementById('nameInput').value.trim();
+                const email=document.getElementById('emailInput').value.trim();
+                if(!name||!email) return;
+                const code=genCode(); markClaimed(email,code); showQR(code);
+                const w=document.createElement('div');w.style.marginTop='1rem';showClaimed(w);form.replaceWith(w);
+                const h=formWrap.querySelector('h3'), p=formWrap.querySelector('p:not(.email-terms)');
+                const s=formWrap.querySelector('.discount-steps'), t=formWrap.querySelector('.email-terms');
+                if(h) h.textContent='Bedankt, '+name+'!';
+                if(p) p.textContent='Uw persoonlijke kortingscode is aangemaakt.';
+                if(s) s.remove(); if(t) t.remove();
+                document.getElementById('floatingCta').style.display='none';
+            });
+        }
+
+        // Modal close
+        document.getElementById('modalClose').addEventListener('click', () => { document.getElementById('qrModal').classList.remove('active'); document.body.style.overflow=''; });
+        document.getElementById('qrModal').addEventListener('click', e => { if(e.target===e.currentTarget){e.currentTarget.classList.remove('active');document.body.style.overflow='';} });
+
+        // Floating CTA
+        const fc=document.getElementById('floatingCta'); let dismissed=false;
+        if(!claimed()){
+            setTimeout(()=>{if(!dismissed&&!claimed()) fc.classList.add('visible');}, 8000);
+            window.addEventListener('scroll', function onS(){
+                if(scrollY/(document.body.scrollHeight-innerHeight)>0.4 && !dismissed && !claimed()){ fc.classList.add('visible'); window.removeEventListener('scroll',onS); }
+            });
+        }
+        document.getElementById('floatingClose').addEventListener('click', () => { fc.classList.remove('visible'); dismissed=true; });
+        document.getElementById('floatingSubmit').addEventListener('click', () => {
+            const email=document.getElementById('floatingEmail').value.trim();
+            if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('floatingEmail').style.borderColor='#ef4444';return;}
+            if(claimed()) return alert('U heeft al een kortingscode!');
+            const code=genCode(); markClaimed(email,code); showQR(code);
+            fc.style.display='none';
+            const f=formWrap?.querySelector('.email-form');
+            if(f){const w=document.createElement('div');w.style.marginTop='1rem';showClaimed(w);f.replaceWith(w);}
+        });
+
+        // Volume tier toggle
+        const volTiers = document.getElementById('volTiers');
+        if (volTiers) {
+            volTiers.querySelectorAll('.vol-tier').forEach(tier => {
+                tier.addEventListener('click', () => {
+                    volTiers.querySelectorAll('.vol-tier').forEach(t => t.classList.remove('active'));
+                    tier.classList.add('active');
+                });
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => { e.preventDefault(); const t=document.querySelector(a.getAttribute('href')); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); });
+        });
+    })();
+    </script>
+</body>
+</html>
