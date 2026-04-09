@@ -9,6 +9,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        /* ═══════ LOADING SCREEN ═══════ */
+        .loader {
+            position: fixed; inset: 0; z-index: 99999;
+            background: #0a0e17;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader img {
+            width: 140px; height: auto;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+        .loader-bar {
+            width: 120px; height: 3px; background: rgba(14,165,233,0.15);
+            border-radius: 3px; margin-top: 2rem; overflow: hidden;
+        }
+        .loader-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--blue-primary, #0ea5e9), #22d3ee);
+            border-radius: 3px;
+            animation: loaderFill 1.8s ease-in-out forwards;
+        }
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes loaderFill {
+            0% { width: 0%; }
+            60% { width: 70%; }
+            100% { width: 100%; }
+        }
+
         :root {
             --dark: #0a0e17;
             --dark-surface: #111827;
@@ -90,7 +123,9 @@
             height: 48px; width: auto;
             filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.3));
             transition: var(--transition);
+            opacity: 0; pointer-events: none;
         }
+        nav.scrolled .logo img { opacity: 1; pointer-events: auto; }
         .logo:hover img { filter: drop-shadow(0 0 14px rgba(14, 165, 233, 0.5)); }
 
         .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
@@ -155,32 +190,43 @@
         .bubble {
             position: absolute; bottom: -80px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%,
-                rgba(255,255,255,0.25) 0%,
-                rgba(255,255,255,0.08) 40%,
-                rgba(14,165,233,0.05) 70%,
+            background: radial-gradient(circle at 30% 25%,
+                rgba(255,255,255,0.4) 0%,
+                rgba(14,165,233,0.15) 30%,
+                rgba(34,211,238,0.08) 60%,
                 transparent 100%);
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.2);
             box-shadow:
-                inset 0 -4px 8px rgba(255,255,255,0.06),
-                inset 4px 4px 10px rgba(255,255,255,0.08),
-                0 0 12px rgba(14,165,233,0.06);
+                inset 0 -6px 12px rgba(14,165,233,0.1),
+                inset 3px 3px 8px rgba(255,255,255,0.15),
+                0 0 20px rgba(14,165,233,0.12),
+                0 0 40px rgba(14,165,233,0.04);
             animation: bubbleRise linear infinite;
+            backdrop-filter: blur(2px);
         }
         .bubble::before {
             content: ''; position: absolute;
-            top: 18%; left: 22%;
-            width: 30%; height: 20%;
-            background: rgba(255,255,255,0.3);
+            top: 15%; left: 18%;
+            width: 35%; height: 22%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
             border-radius: 50%;
-            filter: blur(2px);
-            transform: rotate(-35deg);
+            filter: blur(1px);
+            transform: rotate(-40deg);
+        }
+        .bubble::after {
+            content: ''; position: absolute;
+            bottom: 12%; right: 18%;
+            width: 15%; height: 10%;
+            background: rgba(14,165,233,0.25);
+            border-radius: 50%;
+            filter: blur(3px);
         }
         @keyframes bubbleRise {
-            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-            10% { opacity: 1; }
-            80% { opacity: 0.7; }
-            100% { transform: translateY(-110vh) translateX(var(--drift)) scale(var(--end-scale)); opacity: 0; }
+            0% { transform: translateY(0) translateX(0) scale(1) rotate(0deg); opacity: 0; }
+            8% { opacity: 0.9; }
+            50% { opacity: 0.8; }
+            85% { opacity: 0.5; }
+            100% { transform: translateY(-110vh) translateX(var(--drift)) scale(var(--end-scale)) rotate(20deg); opacity: 0; }
         }
         .bubble:nth-child(1)  { width:42px; height:42px; left:5%;  animation-duration:9s;  animation-delay:0s;   --drift:40px;  --end-scale:0.6; }
         .bubble:nth-child(2)  { width:18px; height:18px; left:15%; animation-duration:7s;  animation-delay:1.2s; --drift:-30px; --end-scale:0.8; }
@@ -216,6 +262,13 @@
         .hero-badge .pulse {
             width: 7px; height: 7px; background: var(--success);
             border-radius: 50%; animation: pulse 2s ease-in-out infinite;
+        }
+        .hero-badge.closed {
+            background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.25);
+            color: #f87171;
+        }
+        .hero-badge.closed .pulse {
+            background: #ef4444; animation: pulse 3s ease-in-out infinite;
         }
         @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.5); } }
 
@@ -382,10 +435,24 @@
         .m-item:hover .m-overlay { opacity: 1; }
         .m-overlay span { font-size: 0.85rem; color: var(--gray); font-weight: 500; font-family: var(--font-display); }
 
-        /* Photo placeholders when images missing */
-        .photo-card img, .m-item img {
-            background: var(--dark-card);
+        .photo-card img { background: var(--dark-card); }
+
+        /* Collage */
+        .collage-2x2 {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
         }
+        .collage-item {
+            border-radius: var(--radius-sm); overflow: hidden;
+            border: 1px solid var(--dark-border); transition: var(--transition);
+            height: 220px;
+        }
+        .collage-item:hover { border-color: rgba(14,165,233,0.3); box-shadow: var(--shadow-glow); }
+        .collage-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s var(--transition);
+        }
+        .collage-item:hover img { transform: scale(1.05); }
 
         /* ═══════ SERVICES ═══════ */
         .services-grid {
@@ -470,9 +537,7 @@
         }
         .program-price .amount {
             font-family: 'Sora', var(--font-display); font-weight: 800; font-size: 4.2rem;
-            line-height: 1; letter-spacing: -3px; color: var(--white);
-        }
-        .program-card.featured .program-price .amount {
+            line-height: 1; letter-spacing: -3px;
             background: linear-gradient(180deg, var(--white) 30%, var(--blue-glow) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -720,12 +785,79 @@
         .map-embed iframe { width: 100%; height: 100%; border: none; filter: brightness(0.7) contrast(1.2) saturate(0); }
 
         /* ═══════ FLOATING CTA ═══════ */
-        .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 900; display: none; }
+        /* ═══════ WHATSAPP BUBBEL ═══════ */
+        .wa-bubble {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-primary), var(--cyan));
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 25px rgba(14, 165, 233, 0.35), 0 0 40px rgba(14, 165, 233, 0.1);
+            cursor: pointer; text-decoration: none;
+            transition: all 0.35s var(--transition);
+            animation: fadeInUp 0.6s ease-out 2s both;
+            overflow: visible;
+        }
+        .wa-bubble:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 8px 35px rgba(14, 165, 233, 0.45), 0 0 50px rgba(14, 165, 233, 0.15);
+        }
+        .wa-bubble svg { width: 26px; height: 26px; fill: white; position: relative; z-index: 2; }
+        /* Bubbeltjes rond de knop */
+        .wa-bubble::before {
+            content: ''; position: absolute; inset: -4px;
+            border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.3);
+            animation: waPing 2.5s ease-out infinite;
+        }
+        .wa-bubble::after {
+            content: ''; position: absolute;
+            width: 100%; height: 100%; border-radius: 50%;
+            background:
+                radial-gradient(circle at 25% 20%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 50%),
+                radial-gradient(circle at 70% 75%, rgba(34,211,238,0.2) 0%, transparent 40%);
+            z-index: 1;
+        }
+        .wa-mini-bubble {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), rgba(14,165,233,0.2));
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: miniBubbleFloat ease-in-out infinite;
+            pointer-events: none;
+        }
+        .wa-mini-bubble:nth-child(2) { width: 10px; height: 10px; top: -6px; right: 2px; animation-duration: 3s; }
+        .wa-mini-bubble:nth-child(3) { width: 7px; height: 7px; top: 4px; right: -8px; animation-duration: 2.5s; animation-delay: 0.5s; }
+        .wa-mini-bubble:nth-child(4) { width: 5px; height: 5px; bottom: -4px; right: 8px; animation-duration: 3.5s; animation-delay: 1s; }
+        .wa-mini-bubble:nth-child(5) { width: 8px; height: 8px; top: 10px; left: -6px; animation-duration: 2.8s; animation-delay: 0.3s; }
+        @keyframes miniBubbleFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+            50% { transform: translateY(-6px) scale(1.15); opacity: 1; }
+        }
+        @keyframes waPing {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .wa-tooltip {
+            position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%);
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            border-radius: 10px; padding: 0.6rem 1rem;
+            font-size: 0.82rem; color: var(--white); white-space: nowrap;
+            font-family: var(--font-display); font-weight: 500;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(-50%) translateX(5px);
+        }
+        .wa-tooltip::before {
+            content: ''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+            border: 6px solid transparent; border-left-color: var(--dark-card);
+        }
+        .wa-bubble:hover .wa-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+        .floating-cta { position: fixed; bottom: 2rem; left: 2rem; z-index: 900; display: none; }
         .floating-cta.visible { display: block; animation: floatIn 0.5s ease-out; }
         @keyframes floatIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
         .floating-card {
             background: var(--dark-card); border: 1px solid rgba(14, 165, 233, 0.3);
-            border-radius: var(--radius); padding: 1.5rem; width: 320px;
+            border-radius: var(--radius); padding: 1.8rem; width: 320px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(14, 165, 233, 0.1);
             position: relative;
         }
@@ -735,16 +867,17 @@
         }
         .floating-card h4 {
             font-family: var(--font-display); font-weight: 700; font-size: 1.1rem;
-            margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 0.3rem;
         }
-        .floating-card p { color: var(--gray); font-size: 0.85rem; margin-bottom: 1rem; }
-        .mini-form { display: flex; gap: 0.5rem; }
+        .floating-card p { color: var(--gray); font-size: 0.85rem; margin-bottom: 1.2rem; }
+        .mini-form { display: flex; flex-direction: column; gap: 0.6rem; }
         .mini-form input {
-            flex: 1; padding: 0.7rem 1rem; background: var(--dark-surface);
+            width: 100%; padding: 0.75rem 1rem; background: var(--dark-surface);
             border: 1px solid var(--dark-border); border-radius: 8px;
-            color: var(--white); font-size: 0.85rem; outline: none;
+            color: var(--white); font-size: 0.9rem; outline: none;
         }
         .mini-form input:focus { border-color: var(--blue-primary); }
+        .mini-form button { width: 100%; padding: 0.75rem; border-radius: 8px; }
         .mini-form button {
             padding: 0.7rem 1rem; background: var(--blue-primary); border: none;
             border-radius: 8px; color: var(--white); font-family: var(--font-display);
@@ -808,40 +941,38 @@
             }
             .hero-left {
                 order: 1;
-                padding: 7rem 1.8rem 2.5rem;
-                background: linear-gradient(160deg, #0c1520 0%, #0f1a2e 40%, #0a1628 100%);
+                padding: 3.5rem 0 1.5rem;
+                background: none;
                 text-align: left;
-                position: relative;
-                overflow: hidden;
             }
-            .hero-left::after {
-                content: ''; position: absolute; inset: 0; pointer-events: none;
-                background:
-                    radial-gradient(circle at 80% 20%, rgba(14,165,233,0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 20% 80%, rgba(34,211,238,0.06) 0%, transparent 40%);
-            }
-            .hero-left .hero-logo { width: 160px; margin-bottom: 1.2rem; position: relative; z-index: 1; }
-            .hero-left .hero-badge { margin-bottom: 1.2rem; position: relative; z-index: 1; }
-            .hero-left h1 { font-size: 2.2rem; letter-spacing: -1px; position: relative; z-index: 1; }
-            .hero-left .hero-tagline { margin-bottom: 2rem; font-size: 0.95rem; position: relative; z-index: 1; }
-            .hero-left .hero-buttons { justify-content: flex-start; position: relative; z-index: 1; }
+            .hero-left > * { padding-left: 1.8rem; padding-right: 1.8rem; }
+            .hero-left::before { display: none; }
+            .hero-left .hero-logo { width: 180px; margin-bottom: 1.2rem; }
+            .hero-left .hero-badge { margin-bottom: 1rem; }
+            .hero-left h1 { font-size: 2.4rem; letter-spacing: -1px; }
+            .hero-left .hero-tagline { margin-bottom: 2rem; font-size: 0.95rem; }
+            .hero-left .hero-buttons { justify-content: flex-start; }
             .hero-right {
                 order: 2;
                 position: relative;
-                height: 55vh;
+                height: 50vh;
+                margin-top: -4rem;
             }
             .hero-right::before {
                 background:
-                    linear-gradient(180deg, #0a1628 0%, transparent 20%, transparent 85%, rgba(10,14,23,0.5) 100%) !important;
+                    linear-gradient(180deg, #0d1628 0%, rgba(13,22,40,0.6) 20%, transparent 40%, transparent 85%, rgba(10,14,23,0.6) 100%) !important;
             }
             .hero-right video, .hero-right img { filter: brightness(0.85) saturate(1.2); }
             .hero-bubbles { z-index: 1; }
+            .collage-item { height: 160px; }
             .services-grid, .programs-grid { grid-template-columns: 1fr; }
             .discount-container, .info-grid { grid-template-columns: 1fr; }
             .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
             .masonry-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 200px; }
             .masonry-grid .m-wide { grid-column: span 1; }
-            .bundle-banner { flex-direction: column; text-align: center; }
+            .bundle-banner { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+            .volume-tiers { grid-template-columns: repeat(2, 1fr); width: 100%; }
+            .bundle-banner .btn { width: 100%; justify-content: center; }
             .photo-card { flex: 0 0 270px; }
         }
         @media (max-width: 480px) {
@@ -858,6 +989,12 @@
     </style>
 </head>
 <body>
+    <!-- ═══════ LOADING SCREEN ═══════ -->
+    <div class="loader" id="loader">
+        <img src="logo.png" alt="Carwash Ermelo">
+        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+
     <div class="water-bg"></div>
 
     <!-- ═══════ NAVIGATION ═══════ -->
@@ -891,9 +1028,9 @@
         </div>
         <div class="hero-left">
             <img src="logo.png" alt="Carwash Ermelo" class="hero-logo">
-            <div class="hero-badge">
-                <div class="pulse"></div>
-                Nu geopend — 7 dagen per week
+            <div class="hero-badge" id="statusBadge">
+                <div class="pulse" id="statusDot"></div>
+                <span id="statusText">Nu geopend — 7 dagen per week</span>
             </div>
             <h1>De schoonste auto<br><span class="thin">voor de beste prijs</span></h1>
             <p class="hero-tagline">
@@ -953,20 +1090,22 @@
         </div>
 
         <div class="photo-scroll" id="photoScroll">
-            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201453.png" alt="Audi RS in de wasstraat"><div class="photo-overlay"><span>Audi RS — Stralend resultaat</span></div></div>
-            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201601.png" alt="BMW M4 in de wasstraat"><div class="photo-overlay"><span>BMW M4 — Java Green</span></div></div>
-            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201645.png" alt="Porsche Taycan in de wasstraat"><div class="photo-overlay"><span>Porsche Taycan — Perfecte glans</span></div></div>
-            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201711.png" alt="BMW 8 Serie in de wasstraat"><div class="photo-overlay"><span>BMW 8 Serie — Premium wash</span></div></div>
-            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201740.png" alt="Audi met gekleurd schuim"><div class="photo-overlay"><span>Gekleurd schuim in actie</span></div></div>
             <div class="photo-card"><img src="fotos/screely-instagram-20260409-201832.png" alt="Porsche 911 bij Carwash Ermelo"><div class="photo-overlay"><span>Welkom bij Carwash Ermelo</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201740.png" alt="Audi met gekleurd schuim"><div class="photo-overlay"><span>Gekleurd schuim in actie</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201711.png" alt="BMW 8 Serie in de wasstraat"><div class="photo-overlay"><span>BMW 8 Serie — Premium wash</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201645.png" alt="Porsche Taycan in de wasstraat"><div class="photo-overlay"><span>Porsche Taycan — Perfecte glans</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201601.png" alt="BMW M4 in de wasstraat"><div class="photo-overlay"><span>BMW M4 — Java Green</span></div></div>
+            <div class="photo-card"><img src="fotos/screely-instagram-20260409-201453.png" alt="Audi RS in de wasstraat"><div class="photo-overlay"><span>Audi RS — Stralend resultaat</span></div></div>
         </div>
 
-        <div class="masonry-grid" style="margin-top: 3rem;">
-            <div class="m-item m-tall reveal"><img src="fotos/screely-instagram-20260409-201711.png" alt="BMW 8 Serie"><div class="m-overlay"><span>BMW 8 Serie — Premium wash</span></div></div>
-            <div class="m-item reveal reveal-delay-1"><img src="fotos/screely-instagram-20260409-201740.png" alt="Gekleurd schuim"><div class="m-overlay"><span>Gekleurd schuim in actie</span></div></div>
-            <div class="m-item reveal reveal-delay-2"><img src="fotos/screely-instagram-20260409-201645.png" alt="Porsche Taycan"><div class="m-overlay"><span>Porsche Taycan</span></div></div>
-            <div class="m-item m-wide reveal reveal-delay-3"><img src="fotos/screely-instagram-20260409-201832.png" alt="Welkom bij Carwash Ermelo"><div class="m-overlay"><span>Welkom bij Carwash Ermelo</span></div></div>
-            <div class="m-item reveal reveal-delay-4"><img src="fotos/screely-instagram-20260409-201601.png" alt="BMW M4"><div class="m-overlay"><span>BMW M4 — Java Green</span></div></div>
+        <!-- Compacte collage -->
+        <div class="collage reveal" style="max-width: 1200px; margin: 2.5rem auto 0; padding: 0 2rem;">
+            <div class="collage-2x2">
+                <div class="collage-item"><img src="fotos/screely-instagram-20260409-201711.png" alt="BMW 8 Serie"></div>
+                <div class="collage-item"><img src="fotos/screely-instagram-20260409-201832.png" alt="Welkom bij Carwash Ermelo"></div>
+                <div class="collage-item"><img src="fotos/screely-instagram-20260409-201645.png" alt="Porsche Taycan"></div>
+                <div class="collage-item"><img src="fotos/screely-instagram-20260409-201601.png" alt="BMW M4"></div>
+            </div>
         </div>
     </section>
 
@@ -989,7 +1128,7 @@
                 <p>Met een capaciteit van 90+ auto's per uur en maximaal 5 voertuigen tegelijk in de wasstraat, bent u binnen enkele minuten klaar.</p>
             </div>
             <div class="service-card reveal reveal-delay-3">
-                <div class="service-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                <div class="service-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.5" stroke-linecap="round"><text x="5" y="18" font-size="18" font-weight="700" font-family="Arial" fill="var(--cyan)" stroke="none">&euro;</text></svg></div>
                 <h3>Beste Prijs-Kwaliteit</h3>
                 <p>Betaalbare tarieven zonder concessies aan kwaliteit. Pin, contant, tankpassen — wij accepteren bijna alle betaalmethoden.</p>
             </div>
@@ -1109,10 +1248,10 @@
                 <p>Hoe meer wasbonnen, hoe hoger uw korting. Geldig voor alle programma's.</p>
             </div>
             <div class="volume-tiers" id="volTiers">
-                <div class="vol-tier"><span class="vol-amount">25 stuks</span><span class="vol-discount">5%</span></div>
-                <div class="vol-tier"><span class="vol-amount">50 stuks</span><span class="vol-discount">8%</span></div>
-                <div class="vol-tier"><span class="vol-amount">100 stuks</span><span class="vol-discount">10%</span></div>
-                <div class="vol-tier"><span class="vol-amount">250 stuks</span><span class="vol-discount">15%</span></div>
+                <div class="vol-tier"><span class="vol-amount"><span class="vol-num" data-target="25">0</span> stuks</span><span class="vol-discount"><span class="vol-pct" data-target="5">0</span>%</span></div>
+                <div class="vol-tier"><span class="vol-amount"><span class="vol-num" data-target="50">0</span> stuks</span><span class="vol-discount"><span class="vol-pct" data-target="8">0</span>%</span></div>
+                <div class="vol-tier"><span class="vol-amount"><span class="vol-num" data-target="100">0</span> stuks</span><span class="vol-discount"><span class="vol-pct" data-target="10">0</span>%</span></div>
+                <div class="vol-tier"><span class="vol-amount"><span class="vol-num" data-target="250">0</span> stuks</span><span class="vol-discount"><span class="vol-pct" data-target="15">0</span>%</span></div>
             </div>
             <a href="mailto:info@carwash-ermelo.nl?subject=Wasbonnen%20bestellen" class="btn btn-primary">Offerte Aanvragen</a>
         </div>
@@ -1219,6 +1358,16 @@
         </div>
     </footer>
 
+    <!-- ═══════ WHATSAPP BUBBEL ═══════ -->
+    <a href="https://wa.me/31684112825" target="_blank" rel="noopener" class="wa-bubble" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <div class="wa-mini-bubble"></div>
+        <div class="wa-mini-bubble"></div>
+        <div class="wa-mini-bubble"></div>
+        <div class="wa-mini-bubble"></div>
+        <span class="wa-tooltip">Stuur ons een bericht</span>
+    </a>
+
     <!-- ═══════ FLOATING CTA ═══════ -->
     <div class="floating-cta" id="floatingCta">
         <div class="floating-card">
@@ -1253,6 +1402,45 @@
     (function() {
         'use strict';
 
+        // Scroll to top on refresh
+        history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('done');
+            }, 2000);
+        });
+
+        // Open/gesloten status
+        function updateStatus() {
+            const now = new Date();
+            const day = now.getDay(); // 0=zo, 1=ma...6=za
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const time = h * 60 + m;
+
+            let open, close;
+            if (day === 0) { open = 600; close = 1020; }        // zo: 10:00-17:00
+            else if (day === 6) { open = 480; close = 1080; }   // za: 08:00-18:00
+            else { open = 510; close = 1080; }                   // ma-vr: 08:30-18:00
+
+            const badge = document.getElementById('statusBadge');
+            const text = document.getElementById('statusText');
+            const isOpen = time >= open && time < close;
+
+            if (isOpen) {
+                badge.classList.remove('closed');
+                text.textContent = 'Nu geopend — 7 dagen per week';
+            } else {
+                badge.classList.add('closed');
+                text.textContent = 'Nu gesloten — 7 dagen per week open';
+            }
+        }
+        updateStatus();
+        setInterval(updateStatus, 60000);
+
         // Nav scroll
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 50));
@@ -1285,25 +1473,27 @@
             requestAnimationFrame(tick);
         }
 
+        // Store original values and set to 0
+        const statsBar = document.querySelector('.stats-inner');
+        const statNums = document.querySelectorAll('.stat-number');
+        const statData = [];
+        statNums.forEach(n => {
+            const text = n.textContent.trim();
+            const match = text.match(/^(\d+)/);
+            if (match) {
+                statData.push({ el: n, target: parseInt(match[1]), suffix: text.replace(match[1], '') });
+                n.textContent = '0' + text.replace(match[1], '');
+            }
+        });
+
         const statsObserver = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
-                    const nums = e.target.querySelectorAll('.stat-number');
-                    nums.forEach(n => {
-                        const text = n.textContent.trim();
-                        const match = text.match(/^(\d+)/);
-                        if (match) {
-                            const target = parseInt(match[1]);
-                            const suffix = text.replace(match[1], '');
-                            n.textContent = '0' + suffix;
-                            countUp(n, target, suffix);
-                        }
-                    });
+                    statData.forEach(d => countUp(d.el, d.target, d.suffix));
                     statsObserver.unobserve(e.target);
                 }
             });
-        }, { threshold: 0.5 });
-        const statsBar = document.querySelector('.stats-inner');
+        }, { threshold: 0.3 });
         if (statsBar) statsObserver.observe(statsBar);
 
         // Today highlight
@@ -1411,7 +1601,7 @@
         // Floating CTA
         const fc=document.getElementById('floatingCta'); let dismissed=false;
         if(!claimed()){
-            setTimeout(()=>{if(!dismissed&&!claimed()) fc.classList.add('visible');}, 8000);
+            setTimeout(()=>{if(!dismissed&&!claimed()) fc.classList.add('visible');}, 10000);
             window.addEventListener('scroll', function onS(){
                 if(scrollY/(document.body.scrollHeight-innerHeight)>0.4 && !dismissed && !claimed()){ fc.classList.add('visible'); window.removeEventListener('scroll',onS); }
             });
@@ -1436,6 +1626,22 @@
                     tier.classList.add('active');
                 });
             });
+        }
+
+        // Volume tiers count-up
+        const volBox = document.getElementById('volTiers');
+        if (volBox) {
+            const volObserver = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        e.target.querySelectorAll('[data-target]').forEach(el => {
+                            countUp(el, parseInt(el.dataset.target), '');
+                        });
+                        volObserver.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            volObserver.observe(volBox);
         }
 
         // Smooth scroll
