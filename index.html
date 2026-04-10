@@ -1002,13 +1002,32 @@
             .hero-right {
                 order: 2;
                 position: relative;
-                height: 50vh;
+                height: 45vh;
+                margin: 0 1.2rem 1.5rem;
+                border-radius: 1.2rem;
+                overflow: hidden;
+                box-shadow:
+                    0 0 30px rgba(14,165,233,0.25),
+                    0 0 60px rgba(14,165,233,0.18),
+                    0 0 120px rgba(14,165,233,0.10),
+                    0 20px 60px rgba(0,0,0,0.4);
             }
             .hero-right::before {
+                border-radius: 1.2rem;
                 background:
-                    linear-gradient(180deg, #0d1628 0%, rgba(13,22,40,0.6) 20%, transparent 40%, transparent 85%, rgba(10,14,23,0.6) 100%) !important;
+                    linear-gradient(180deg, var(--dark) 0%, rgba(13,22,40,0.6) 10%, transparent 30%, transparent 75%, rgba(10,14,23,0.5) 100%),
+                    linear-gradient(90deg, rgba(13,22,40,0.4) 0%, transparent 15%, transparent 85%, rgba(13,22,40,0.4) 100%) !important;
             }
-            .hero-right video, .hero-right img { filter: brightness(0.85) saturate(1.2); }
+            .hero-right::after {
+                border-radius: 1.2rem;
+                background:
+                    radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.15) 0%, transparent 55%),
+                    radial-gradient(ellipse at 50% 100%, rgba(14,165,233,0.08) 0%, transparent 45%) !important;
+            }
+            .hero-right video, .hero-right img {
+                filter: brightness(0.85) saturate(1.2);
+                border-radius: 1.2rem;
+            }
             .hero-bubbles { z-index: 1; }
             .collage-item { height: 160px; }
             .services-grid, .programs-grid { grid-template-columns: 1fr; }
