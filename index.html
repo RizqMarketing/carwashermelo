@@ -826,6 +826,88 @@
         }
         .modal-instructions { font-size: 0.85rem; color: var(--gray-dim); border-top: 1px solid var(--dark-border); padding-top: 1rem; }
 
+        /* ═══════ OFFERTE MODAL ═══════ */
+        .offerte-modal {
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            border-radius: var(--radius); max-width: 520px; width: 100%;
+            padding: 2.5rem; position: relative;
+            animation: modalSlide 0.4s ease-out;
+            box-shadow: 0 0 100px rgba(14, 165, 233, 0.1);
+        }
+        .offerte-modal h3 {
+            font-family: var(--font-display); font-weight: 700; font-size: 1.4rem;
+            text-align: center; margin-bottom: 0.3rem;
+        }
+        .offerte-modal .offerte-sub {
+            color: var(--gray); font-size: 0.9rem; text-align: center; margin-bottom: 1.8rem;
+        }
+        .offerte-summary {
+            background: var(--dark-surface); border: 1px solid var(--dark-border);
+            border-radius: var(--radius-sm); padding: 1.2rem 1.5rem; margin-bottom: 1.8rem;
+        }
+        .offerte-summary-title {
+            font-family: var(--font-display); font-weight: 600; font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-dim);
+            margin-bottom: 0.8rem;
+        }
+        .offerte-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.4rem 0; font-size: 0.9rem;
+        }
+        .offerte-row span:first-child { color: var(--gray); }
+        .offerte-row span:last-child { color: var(--white); font-weight: 600; font-family: var(--font-display); }
+        .offerte-row.total {
+            border-top: 1px solid var(--dark-border); margin-top: 0.5rem; padding-top: 0.8rem;
+        }
+        .offerte-row.total span:last-child {
+            color: var(--cyan); font-size: 1.15rem; font-weight: 800;
+            text-shadow: 0 0 15px rgba(34,211,238,0.3);
+        }
+        .offerte-row.savings span:last-child { color: var(--success); font-weight: 600; }
+        .offerte-form-group {
+            margin-bottom: 1rem;
+        }
+        .offerte-form-group label {
+            display: block; font-family: var(--font-display); font-weight: 600;
+            font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--gray); margin-bottom: 0.4rem;
+        }
+        .offerte-input {
+            width: 100%; padding: 0.8rem 1rem; font-size: 0.92rem;
+            font-family: var(--font-body); color: var(--white);
+            background: var(--dark-surface); border: 1px solid var(--dark-border);
+            border-radius: var(--radius-sm); outline: none; transition: var(--transition);
+        }
+        .offerte-input:focus {
+            border-color: var(--blue-primary);
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+        }
+        .offerte-input::placeholder { color: var(--gray-dim); }
+        .offerte-submit {
+            width: 100%; padding: 0.9rem; margin-top: 0.5rem;
+            font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+            color: var(--dark); background: linear-gradient(135deg, var(--blue-primary), var(--cyan));
+            border: none; border-radius: var(--radius-sm); cursor: pointer;
+            transition: all 0.3s; letter-spacing: 0.5px;
+        }
+        .offerte-submit:hover {
+            box-shadow: 0 8px 30px rgba(14,165,233,0.35); transform: translateY(-2px);
+        }
+        .offerte-success {
+            text-align: center; padding: 1rem 0;
+        }
+        .offerte-success-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: rgba(16,185,129,0.1); color: var(--success);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.2rem; font-size: 1.8rem;
+        }
+        .offerte-success h4 {
+            font-family: var(--font-display); font-weight: 700; font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .offerte-success p { color: var(--gray); font-size: 0.9rem; }
+
         /* ═══════ INFO ═══════ */
         .info-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         .info-card {
@@ -1479,9 +1561,51 @@
                 </div>
             </div>
 
-            <a href="mailto:info@carwash-ermelo.nl?subject=Wasbonnen%20bestellen" class="btn btn-primary" style="margin-top: 0.5rem;">Offerte Aanvragen</a>
+            <button class="btn btn-primary" id="offerteBtn" style="margin-top: 0.5rem;">Offerte Aanvragen</button>
         </div>
     </section>
+
+    <!-- ═══════ OFFERTE MODAL ═══════ -->
+    <div class="modal-overlay" id="offerteModal">
+        <div class="offerte-modal">
+            <button class="modal-close" id="offerteClose">&times;</button>
+            <h3>Offerte Aanvragen</h3>
+            <p class="offerte-sub">Controleer uw selectie en vul uw gegevens in</p>
+
+            <div class="offerte-summary">
+                <div class="offerte-summary-title">Uw selectie</div>
+                <div class="offerte-row"><span>Programma</span><span id="offProg">—</span></div>
+                <div class="offerte-row"><span>Velgenreiniging</span><span id="offVelgen">—</span></div>
+                <div class="offerte-row"><span>Prijs per wasbeurt</span><span id="offUnit">—</span></div>
+                <div class="offerte-row"><span>Aantal wasbonnen</span><span id="offCount">—</span></div>
+                <div class="offerte-row savings" id="offSavingsRow" style="display:none;"><span>Korting</span><span id="offSavings">—</span></div>
+                <div class="offerte-row total"><span>Totaalprijs</span><span id="offTotal">—</span></div>
+            </div>
+
+            <div id="offerteFormWrap">
+                <div class="offerte-form-group">
+                    <label>Bedrijfsnaam</label>
+                    <input type="text" class="offerte-input" id="offBedrijf" placeholder="Naam van uw bedrijf">
+                </div>
+                <div class="offerte-form-group">
+                    <label>Contactpersoon</label>
+                    <input type="text" class="offerte-input" id="offNaam" placeholder="Uw naam" required>
+                </div>
+                <div class="offerte-form-group">
+                    <label>E-mailadres</label>
+                    <input type="email" class="offerte-input" id="offEmail" placeholder="uw@email.nl" required>
+                </div>
+                <div class="offerte-form-group">
+                    <label>Telefoonnummer</label>
+                    <input type="tel" class="offerte-input" id="offTel" placeholder="06 1234 5678">
+                </div>
+                <button class="offerte-submit" id="offerteSend">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:0.4rem;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    Verstuur Offerte Aanvraag
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- ═══════ DISCOUNT / EMAIL ═══════ -->
     <section id="korting">
@@ -1728,6 +1852,7 @@
         if (hl) { const items = hl.querySelectorAll('li'); if (items[dayMap[new Date().getDay()]]) items[dayMap[new Date().getDay()]].classList.add('today'); }
 
         // Kostencalculator
+        const calcState = {};
         (function() {
             const prog = document.getElementById('calcProgram');
             const amt = document.getElementById('calcAmount');
@@ -1763,9 +1888,7 @@
                 labelOff.classList.toggle('active', !velgen.checked);
 
                 // Per wasbeurt (met korting berekend)
-                const cents = discountedUnit.toFixed(2).replace('.', ',');
-                perWash.innerHTML = '&euro;' + cents;
-
+                perWash.innerHTML = '&euro;' + discountedUnit.toFixed(2).replace('.', ',');
                 countEl.textContent = count + '×';
                 totalEl.innerHTML = '&euro;' + total.toFixed(2).replace('.', ',');
 
@@ -1774,12 +1897,117 @@
                 } else {
                     savingsWrap.innerHTML = '<span class="calc-no-discount">Kies 25+ wasbonnen voor volumekorting</span>';
                 }
+
+                // Sync vol-tier active states
+                const tiers = document.querySelectorAll('#volTiers .vol-tier');
+                const tierMap = { 25: 0, 50: 1, 100: 2, 250: 3 };
+                tiers.forEach(t => t.classList.remove('active'));
+                if (tierMap[count] !== undefined) tiers[tierMap[count]].classList.add('active');
+
+                // Store state for offerte popup
+                calcState.program = opt.textContent.split(' — ')[0];
+                calcState.velgen = velgen.checked;
+                calcState.unitPrice = unitPrice;
+                calcState.discountedUnit = discountedUnit;
+                calcState.count = count;
+                calcState.discount = discount;
+                calcState.discountAmount = discountAmount;
+                calcState.total = total;
             }
 
             prog.addEventListener('change', calc);
             amt.addEventListener('change', calc);
             velgen.addEventListener('change', calc);
             calc();
+        })();
+
+        // Volume-tier knoppen koppelen aan calculator
+        (function() {
+            const tiers = document.querySelectorAll('#volTiers .vol-tier');
+            const amt = document.getElementById('calcAmount');
+            const tierValues = ['25', '50', '100', '250'];
+
+            tiers.forEach((tier, i) => {
+                tier.addEventListener('click', () => {
+                    // Set dropdown to matching value
+                    for (let j = 0; j < amt.options.length; j++) {
+                        if (amt.options[j].value === tierValues[i]) {
+                            amt.selectedIndex = j;
+                            amt.dispatchEvent(new Event('change'));
+                            break;
+                        }
+                    }
+                });
+            });
+        })();
+
+        // Offerte popup
+        (function() {
+            const modal = document.getElementById('offerteModal');
+            const btn = document.getElementById('offerteBtn');
+            const close = document.getElementById('offerteClose');
+            const send = document.getElementById('offerteSend');
+            const formWrap = document.getElementById('offerteFormWrap');
+
+            function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
+
+            function openModal() {
+                // Fill summary from calcState
+                document.getElementById('offProg').textContent = calcState.program || '—';
+                document.getElementById('offVelgen').textContent = calcState.velgen ? 'Ja' : 'Nee';
+                document.getElementById('offUnit').textContent = fmt(calcState.discountedUnit || 0);
+                document.getElementById('offCount').textContent = (calcState.count || 0) + ' stuks';
+                document.getElementById('offTotal').textContent = fmt(calcState.total || 0);
+
+                const savingsRow = document.getElementById('offSavingsRow');
+                if (calcState.discount > 0) {
+                    savingsRow.style.display = 'flex';
+                    document.getElementById('offSavings').textContent = '-' + fmt(calcState.discountAmount) + ' (' + calcState.discount + '%)';
+                } else {
+                    savingsRow.style.display = 'none';
+                }
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            btn.addEventListener('click', openModal);
+            close.addEventListener('click', () => { modal.classList.remove('active'); document.body.style.overflow = ''; });
+            modal.addEventListener('click', e => { if (e.target === modal) { modal.classList.remove('active'); document.body.style.overflow = ''; } });
+
+            send.addEventListener('click', () => {
+                const naam = document.getElementById('offNaam').value.trim();
+                const email = document.getElementById('offEmail').value.trim();
+                if (!naam || !email) { alert('Vul alstublieft uw naam en e-mailadres in.'); return; }
+
+                const bedrijf = document.getElementById('offBedrijf').value.trim();
+                const tel = document.getElementById('offTel').value.trim();
+
+                // Build mailto with all details
+                const subject = 'Offerte wasbonnen — ' + (calcState.count || '') + 'x ' + (calcState.program || '');
+                const body = 'Offerte aanvraag Carwash Ermelo\n'
+                    + '────────────────────────\n'
+                    + 'Programma: ' + (calcState.program || '') + '\n'
+                    + 'Velgenreiniging: ' + (calcState.velgen ? 'Ja' : 'Nee') + '\n'
+                    + 'Prijs per wasbeurt: ' + fmt(calcState.discountedUnit || 0) + '\n'
+                    + 'Aantal: ' + (calcState.count || 0) + ' stuks\n'
+                    + (calcState.discount > 0 ? 'Korting: ' + calcState.discount + '% (-' + fmt(calcState.discountAmount) + ')\n' : '')
+                    + 'Totaalprijs: ' + fmt(calcState.total || 0) + '\n'
+                    + '────────────────────────\n'
+                    + (bedrijf ? 'Bedrijf: ' + bedrijf + '\n' : '')
+                    + 'Naam: ' + naam + '\n'
+                    + 'Email: ' + email + '\n'
+                    + (tel ? 'Telefoon: ' + tel + '\n' : '');
+
+                window.location.href = 'mailto:info@carwash-ermelo.nl?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+                // Show success state
+                formWrap.innerHTML = '<div class="offerte-success">'
+                    + '<div class="offerte-success-icon">&#10003;</div>'
+                    + '<h4>Aanvraag verstuurd!</h4>'
+                    + '<p>Uw e-mailprogramma is geopend met de offerte. Wij nemen zo snel mogelijk contact met u op.</p>'
+                    + '</div>';
+            });
         })();
 
         // Water droplets
@@ -1888,16 +2116,7 @@
             if(f){const w=document.createElement('div');w.style.marginTop='1rem';showClaimed(w);f.replaceWith(w);}
         });
 
-        // Volume tier toggle
-        const volTiers = document.getElementById('volTiers');
-        if (volTiers) {
-            volTiers.querySelectorAll('.vol-tier').forEach(tier => {
-                tier.addEventListener('click', () => {
-                    volTiers.querySelectorAll('.vol-tier').forEach(t => t.classList.remove('active'));
-                    tier.classList.add('active');
-                });
-            });
-        }
+        // Volume tier toggle (handled by calculator sync)
 
         // Volume tiers count-up
         const volBox = document.getElementById('volTiers');
