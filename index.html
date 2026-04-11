@@ -601,18 +601,11 @@
         .bundle-text h3 span { color: var(--blue-glow); }
         .bundle-text p { color: var(--gray); font-size: 0.95rem; margin-top: 0.3rem; }
 
-        /* ═══════ KOSTENCALCULATOR ═══════ */
-        .calc-section {
-            max-width: 900px; margin: 4rem auto 0; padding: 0 2rem;
-        }
-        .calc-card {
-            background: linear-gradient(135deg, rgba(14,165,233,0.04) 0%, rgba(34,211,238,0.02) 100%);
-            border: 1px solid rgba(14,165,233,0.15);
-            border-radius: var(--radius); padding: 2.5rem; position: relative; overflow: hidden;
-        }
-        .calc-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--blue-primary), var(--cyan), transparent);
+        /* ═══════ KOSTENCALCULATOR (in bundle-banner) ═══════ */
+        .bundle-divider {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(14,165,233,0.3), rgba(34,211,238,0.2), transparent);
+            margin: 0.5rem 0;
         }
         .calc-title {
             font-family: var(--font-display); font-weight: 700; font-size: 1.4rem;
@@ -720,7 +713,6 @@
         }
         @media (max-width: 768px) {
             .calc-grid { grid-template-columns: 1fr; gap: 1rem; }
-            .calc-card { padding: 1.8rem 1.5rem; }
             .calc-result-grid { grid-template-columns: 1fr; gap: 0.5rem; }
         }
 
@@ -1413,7 +1405,7 @@
             </div>
         </div>
 
-        <!-- Wasbonnen volumekorting -->
+        <!-- Wasbonnen & Kostencalculator (samengevoegd) -->
         <div class="bundle-banner reveal">
             <div class="bundle-text">
                 <h3>Bestel wasbonnen & bespaar tot <span>15%</span></h3>
@@ -1425,71 +1417,69 @@
                 <div class="vol-tier"><span class="vol-amount"><span class="vol-num" data-target="100">0</span> stuks</span><span class="vol-discount"><span class="vol-pct" data-target="10">0</span>%</span></div>
                 <div class="vol-tier"><span class="vol-amount"><span class="vol-num" data-target="250">0</span> stuks</span><span class="vol-discount"><span class="vol-pct" data-target="15">0</span>%</span></div>
             </div>
-            <a href="mailto:info@carwash-ermelo.nl?subject=Wasbonnen%20bestellen" class="btn btn-primary">Offerte Aanvragen</a>
-        </div>
 
-        <!-- Kostencalculator -->
-        <div class="calc-section reveal">
-            <div class="calc-card">
-                <div class="calc-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
-                    Kostencalculator
+            <div class="bundle-divider"></div>
+
+            <div class="calc-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+                Kostencalculator
+            </div>
+            <p class="calc-subtitle">Bereken direct de kosten voor uw wasbonnen</p>
+
+            <div class="calc-grid">
+                <div class="calc-group">
+                    <label>Wasprogramma</label>
+                    <select class="calc-select" id="calcProgram">
+                        <option value="9.50" data-without="7.50">Brons — &euro;9,50</option>
+                        <option value="11.00" data-without="8.50">Zilver — &euro;11,00</option>
+                        <option value="13.00" data-without="9.50">Goud — &euro;13,00</option>
+                        <option value="15.00" data-without="11.50">Briljant — &euro;15,00</option>
+                        <option value="17.50" data-without="14.00" selected>Carwash Special — &euro;17,50</option>
+                    </select>
                 </div>
-                <p class="calc-subtitle">Bereken direct de kosten voor uw wasbonnen</p>
-
-                <div class="calc-grid">
-                    <div class="calc-group">
-                        <label>Wasprogramma</label>
-                        <select class="calc-select" id="calcProgram">
-                            <option value="9.50" data-without="7.50">Brons — &euro;9,50</option>
-                            <option value="11.00" data-without="8.50">Zilver — &euro;11,00</option>
-                            <option value="13.00" data-without="9.50">Goud — &euro;13,00</option>
-                            <option value="15.00" data-without="11.50">Briljant — &euro;15,00</option>
-                            <option value="17.50" data-without="14.00" selected>Carwash Special — &euro;17,50</option>
-                        </select>
-                    </div>
-                    <div class="calc-group">
-                        <label>Aantal wasbonnen</label>
-                        <select class="calc-select" id="calcAmount">
-                            <option value="1" data-discount="0">1 wasbon — geen korting</option>
-                            <option value="10" data-discount="0">10 wasbonnen — geen korting</option>
-                            <option value="25" data-discount="5">25 wasbonnen — 5% korting</option>
-                            <option value="50" data-discount="8">50 wasbonnen — 8% korting</option>
-                            <option value="100" data-discount="10">100 wasbonnen — 10% korting</option>
-                            <option value="250" data-discount="15">250 wasbonnen — 15% korting</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="calc-toggle">
-                    <span class="calc-toggle-label" id="calcLabelOff">Zonder velgenreiniging</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="calcVelgen" checked>
-                        <span class="toggle-track"></span>
-                    </label>
-                    <span class="calc-toggle-label active" id="calcLabelOn">Met velgenreiniging</span>
-                </div>
-
-                <div class="calc-result" id="calcResult">
-                    <div class="calc-result-grid">
-                        <div class="calc-result-item">
-                            <div class="calc-result-label">Per wasbeurt</div>
-                            <div class="calc-result-value" id="calcPerWash">&euro;17,50</div>
-                        </div>
-                        <div class="calc-result-item">
-                            <div class="calc-result-label">Aantal</div>
-                            <div class="calc-result-value" id="calcCount">1&times;</div>
-                        </div>
-                        <div class="calc-result-item">
-                            <div class="calc-result-label">Totaalprijs</div>
-                            <div class="calc-result-value highlight" id="calcTotal">&euro;17,50</div>
-                        </div>
-                    </div>
-                    <div id="calcSavingsWrap">
-                        <span class="calc-no-discount">Kies 25+ wasbonnen voor volumekorting</span>
-                    </div>
+                <div class="calc-group">
+                    <label>Aantal wasbonnen</label>
+                    <select class="calc-select" id="calcAmount">
+                        <option value="1" data-discount="0">1 wasbon — geen korting</option>
+                        <option value="10" data-discount="0">10 wasbonnen — geen korting</option>
+                        <option value="25" data-discount="5">25 wasbonnen — 5% korting</option>
+                        <option value="50" data-discount="8">50 wasbonnen — 8% korting</option>
+                        <option value="100" data-discount="10">100 wasbonnen — 10% korting</option>
+                        <option value="250" data-discount="15">250 wasbonnen — 15% korting</option>
+                    </select>
                 </div>
             </div>
+
+            <div class="calc-toggle">
+                <span class="calc-toggle-label" id="calcLabelOff">Zonder velgenreiniging</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="calcVelgen" checked>
+                    <span class="toggle-track"></span>
+                </label>
+                <span class="calc-toggle-label active" id="calcLabelOn">Met velgenreiniging</span>
+            </div>
+
+            <div class="calc-result" id="calcResult">
+                <div class="calc-result-grid">
+                    <div class="calc-result-item">
+                        <div class="calc-result-label">Per wasbeurt</div>
+                        <div class="calc-result-value" id="calcPerWash">&euro;17,50</div>
+                    </div>
+                    <div class="calc-result-item">
+                        <div class="calc-result-label">Aantal</div>
+                        <div class="calc-result-value" id="calcCount">1&times;</div>
+                    </div>
+                    <div class="calc-result-item">
+                        <div class="calc-result-label">Totaalprijs</div>
+                        <div class="calc-result-value highlight" id="calcTotal">&euro;17,50</div>
+                    </div>
+                </div>
+                <div id="calcSavingsWrap">
+                    <span class="calc-no-discount">Kies 25+ wasbonnen voor volumekorting</span>
+                </div>
+            </div>
+
+            <a href="mailto:info@carwash-ermelo.nl?subject=Wasbonnen%20bestellen" class="btn btn-primary" style="margin-top: 0.5rem;">Offerte Aanvragen</a>
         </div>
     </section>
 
