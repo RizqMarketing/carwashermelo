@@ -601,6 +601,129 @@
         .bundle-text h3 span { color: var(--blue-glow); }
         .bundle-text p { color: var(--gray); font-size: 0.95rem; margin-top: 0.3rem; }
 
+        /* ═══════ KOSTENCALCULATOR ═══════ */
+        .calc-section {
+            max-width: 900px; margin: 4rem auto 0; padding: 0 2rem;
+        }
+        .calc-card {
+            background: linear-gradient(135deg, rgba(14,165,233,0.04) 0%, rgba(34,211,238,0.02) 100%);
+            border: 1px solid rgba(14,165,233,0.15);
+            border-radius: var(--radius); padding: 2.5rem; position: relative; overflow: hidden;
+        }
+        .calc-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue-primary), var(--cyan), transparent);
+        }
+        .calc-title {
+            font-family: var(--font-display); font-weight: 700; font-size: 1.4rem;
+            color: var(--white); text-align: center; margin-bottom: 0.4rem;
+        }
+        .calc-title svg { vertical-align: -3px; margin-right: 0.5rem; }
+        .calc-subtitle {
+            text-align: center; color: var(--gray); font-size: 0.9rem; margin-bottom: 2rem;
+        }
+        .calc-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+        }
+        .calc-group label {
+            display: block; font-family: var(--font-display); font-weight: 600;
+            font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--gray); margin-bottom: 0.6rem;
+        }
+        .calc-select {
+            width: 100%; padding: 0.85rem 1.1rem; font-size: 0.95rem;
+            font-family: var(--font-body); color: var(--white);
+            background: var(--dark-card); border: 1px solid var(--dark-border);
+            border-radius: var(--radius-sm); outline: none;
+            transition: var(--transition); cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center;
+        }
+        .calc-select:focus, .calc-select:hover {
+            border-color: var(--blue-primary);
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+        }
+        .calc-select option { background: var(--dark-card); color: var(--white); }
+
+        /* Velgenreiniging toggle */
+        .calc-toggle {
+            display: flex; align-items: center; gap: 0.8rem;
+            margin-top: 1.5rem; justify-content: center;
+        }
+        .calc-toggle-label {
+            font-family: var(--font-display); font-weight: 500;
+            font-size: 0.9rem; color: var(--gray); cursor: pointer;
+            transition: color 0.3s;
+        }
+        .calc-toggle-label.active { color: var(--white); }
+        .toggle-switch {
+            position: relative; width: 52px; height: 28px; cursor: pointer;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-track {
+            position: absolute; inset: 0;
+            background: rgba(14,165,233,0.15); border: 1px solid var(--dark-border);
+            border-radius: 14px; transition: all 0.3s;
+        }
+        .toggle-track::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: var(--gray); transition: all 0.3s;
+        }
+        .toggle-switch input:checked + .toggle-track {
+            background: rgba(14,165,233,0.3); border-color: var(--blue-primary);
+        }
+        .toggle-switch input:checked + .toggle-track::after {
+            transform: translateX(24px); background: var(--blue-glow);
+            box-shadow: 0 0 10px rgba(56,189,248,0.4);
+        }
+
+        /* Resultaat */
+        .calc-result {
+            margin-top: 2rem; padding: 1.8rem;
+            background: linear-gradient(135deg, rgba(14,165,233,0.08) 0%, rgba(34,211,238,0.04) 100%);
+            border: 1px solid rgba(14,165,233,0.2); border-radius: var(--radius-sm);
+            text-align: center;
+        }
+        .calc-result-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .calc-result-item {
+            padding: 0.5rem;
+        }
+        .calc-result-label {
+            font-family: var(--font-display); font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--gray-dim); margin-bottom: 0.3rem;
+        }
+        .calc-result-value {
+            font-family: 'Sora', var(--font-display); font-weight: 800;
+            font-size: 1.5rem; color: var(--white);
+        }
+        .calc-result-value.highlight {
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(34,211,238,0.3);
+        }
+        .calc-result-value .calc-cents { font-size: 0.9rem; }
+        .calc-savings {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 20px; padding: 0.4rem 1rem;
+            font-family: var(--font-display); font-weight: 600;
+            font-size: 0.85rem; color: var(--success);
+        }
+        .calc-no-discount {
+            color: var(--gray-dim); font-size: 0.85rem;
+            font-family: var(--font-display);
+        }
+        @media (max-width: 768px) {
+            .calc-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .calc-card { padding: 1.8rem 1.5rem; }
+            .calc-result-grid { grid-template-columns: 1fr; gap: 0.5rem; }
+        }
+
         /* ═══════ DISCOUNT / EMAIL ═══════ */
         .discount-container {
             max-width: 1000px; margin: 0 auto;
@@ -1304,6 +1427,70 @@
             </div>
             <a href="mailto:info@carwash-ermelo.nl?subject=Wasbonnen%20bestellen" class="btn btn-primary">Offerte Aanvragen</a>
         </div>
+
+        <!-- Kostencalculator -->
+        <div class="calc-section reveal">
+            <div class="calc-card">
+                <div class="calc-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+                    Kostencalculator
+                </div>
+                <p class="calc-subtitle">Bereken direct de kosten voor uw wasbonnen</p>
+
+                <div class="calc-grid">
+                    <div class="calc-group">
+                        <label>Wasprogramma</label>
+                        <select class="calc-select" id="calcProgram">
+                            <option value="9.50" data-without="7.50">Brons — &euro;9,50</option>
+                            <option value="11.00" data-without="8.50">Zilver — &euro;11,00</option>
+                            <option value="13.00" data-without="9.50">Goud — &euro;13,00</option>
+                            <option value="15.00" data-without="11.50">Briljant — &euro;15,00</option>
+                            <option value="17.50" data-without="14.00" selected>Carwash Special — &euro;17,50</option>
+                        </select>
+                    </div>
+                    <div class="calc-group">
+                        <label>Aantal wasbonnen</label>
+                        <select class="calc-select" id="calcAmount">
+                            <option value="1" data-discount="0">1 wasbon — geen korting</option>
+                            <option value="10" data-discount="0">10 wasbonnen — geen korting</option>
+                            <option value="25" data-discount="5">25 wasbonnen — 5% korting</option>
+                            <option value="50" data-discount="8">50 wasbonnen — 8% korting</option>
+                            <option value="100" data-discount="10">100 wasbonnen — 10% korting</option>
+                            <option value="250" data-discount="15">250 wasbonnen — 15% korting</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-toggle">
+                    <span class="calc-toggle-label" id="calcLabelOff">Zonder velgenreiniging</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="calcVelgen" checked>
+                        <span class="toggle-track"></span>
+                    </label>
+                    <span class="calc-toggle-label active" id="calcLabelOn">Met velgenreiniging</span>
+                </div>
+
+                <div class="calc-result" id="calcResult">
+                    <div class="calc-result-grid">
+                        <div class="calc-result-item">
+                            <div class="calc-result-label">Per wasbeurt</div>
+                            <div class="calc-result-value" id="calcPerWash">&euro;17,50</div>
+                        </div>
+                        <div class="calc-result-item">
+                            <div class="calc-result-label">Aantal</div>
+                            <div class="calc-result-value" id="calcCount">1&times;</div>
+                        </div>
+                        <div class="calc-result-item">
+                            <div class="calc-result-label">Totaalprijs</div>
+                            <div class="calc-result-value highlight" id="calcTotal">&euro;17,50</div>
+                        </div>
+                    </div>
+                    <div id="calcSavingsWrap">
+                        <span class="calc-no-discount">Kies 25+ wasbonnen voor volumekorting</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- ═══════ DISCOUNT / EMAIL ═══════ -->
@@ -1549,6 +1736,61 @@
         const dayMap = [6,0,1,2,3,4,5];
         const hl = document.getElementById('hoursList');
         if (hl) { const items = hl.querySelectorAll('li'); if (items[dayMap[new Date().getDay()]]) items[dayMap[new Date().getDay()]].classList.add('today'); }
+
+        // Kostencalculator
+        (function() {
+            const prog = document.getElementById('calcProgram');
+            const amt = document.getElementById('calcAmount');
+            const velgen = document.getElementById('calcVelgen');
+            const perWash = document.getElementById('calcPerWash');
+            const countEl = document.getElementById('calcCount');
+            const totalEl = document.getElementById('calcTotal');
+            const savingsWrap = document.getElementById('calcSavingsWrap');
+            const labelOn = document.getElementById('calcLabelOn');
+            const labelOff = document.getElementById('calcLabelOff');
+
+            function fmt(n) {
+                return '€' + n.toFixed(2).replace('.', ',');
+            }
+
+            function calc() {
+                const opt = prog.options[prog.selectedIndex];
+                const priceWith = parseFloat(opt.value);
+                const priceWithout = parseFloat(opt.dataset.without);
+                const unitPrice = velgen.checked ? priceWith : priceWithout;
+
+                const amtOpt = amt.options[amt.selectedIndex];
+                const count = parseInt(amtOpt.value);
+                const discount = parseInt(amtOpt.dataset.discount);
+
+                const subtotal = unitPrice * count;
+                const discountAmount = subtotal * (discount / 100);
+                const total = subtotal - discountAmount;
+                const discountedUnit = unitPrice * (1 - discount / 100);
+
+                // Update toggle labels
+                labelOn.classList.toggle('active', velgen.checked);
+                labelOff.classList.toggle('active', !velgen.checked);
+
+                // Per wasbeurt (met korting berekend)
+                const cents = discountedUnit.toFixed(2).replace('.', ',');
+                perWash.innerHTML = '&euro;' + cents;
+
+                countEl.textContent = count + '×';
+                totalEl.innerHTML = '&euro;' + total.toFixed(2).replace('.', ',');
+
+                if (discount > 0) {
+                    savingsWrap.innerHTML = '<span class="calc-savings"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> U bespaart ' + fmt(discountAmount) + ' (' + discount + '% korting)</span>';
+                } else {
+                    savingsWrap.innerHTML = '<span class="calc-no-discount">Kies 25+ wasbonnen voor volumekorting</span>';
+                }
+            }
+
+            prog.addEventListener('change', calc);
+            amt.addEventListener('change', calc);
+            velgen.addEventListener('change', calc);
+            calc();
+        })();
 
         // Water droplets
         function createDroplet() {
