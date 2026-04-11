@@ -770,7 +770,12 @@
         .email-form input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
         .email-form input::placeholder { color: var(--gray-dim); }
         .email-form .btn { width: 100%; justify-content: center; }
-        .email-terms { font-size: 0.78rem; color: var(--gray-dim); text-align: center; }
+        .email-terms {
+            font-size: 0.75rem; color: var(--gray-dim); text-align: center;
+            margin-top: 1rem; line-height: 1.5; opacity: 0.7;
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+        }
+        .email-terms svg { flex-shrink: 0; }
 
         .already-claimed {
             background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2);
@@ -782,9 +787,11 @@
         .modal-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-            z-index: 10000; display: none; align-items: center; justify-content: center; padding: 2rem;
+            z-index: 10000; display: none; align-items: flex-start; justify-content: center;
+            padding: 2rem; overflow-y: auto; -webkit-overflow-scrolling: touch;
         }
         .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease-out; }
+        .modal-overlay > * { margin: auto 0; }
         @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
         .qr-modal {
             background: var(--dark-card); border: 1px solid var(--dark-border);
@@ -830,7 +837,7 @@
         .offerte-modal {
             background: var(--dark-card); border: 1px solid var(--dark-border);
             border-radius: var(--radius); max-width: 520px; width: 100%;
-            padding: 2.5rem; position: relative;
+            padding: 2.5rem; position: relative; flex-shrink: 0;
             animation: modalSlide 0.4s ease-out;
             box-shadow: 0 0 100px rgba(14, 165, 233, 0.1);
         }
@@ -1633,7 +1640,7 @@
                     <input type="email" id="emailInput" placeholder="Uw e-mailadres" required>
                     <button type="submit" class="btn btn-primary">Ontvang Mijn Kortingscode</button>
                 </form>
-                <p class="email-terms">Wij respecteren uw privacy. Geen spam, alleen relevante aanbiedingen.</p>
+                <p class="email-terms"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Wij respecteren uw privacy. Geen spam, alleen relevante aanbiedingen.</p>
             </div>
         </div>
     </section>
